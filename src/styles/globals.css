@@ -1,5 +1,6 @@
-@tailwind base;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -101,6 +102,10 @@
   }
 }
 
+html, body,:root {
+  height: 100%;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -109,20 +114,20 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-  background-image: url("data:image/svg+xml,%3Csvg width='70' height='70' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%2310b981' fill-opacity='0.12' fill-rule='evenodd'/%3E%3C/svg%3E");
 
 }
 
 /* Scrollbar */
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 16px;
+  width: 8px;
+  /* height: 16px; */
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: var(--scrollbar-track-color, #ffffff); /* Default light theme color */
+  /* background: var(--scrollbar-track-color, #ffffff); Default light theme color */
+  background: transparent;
 }
 
 /* Handle */
@@ -136,7 +141,17 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-thumb-hover-color, #555); /* Default light theme color */
 }
+/* .scroll-container {
+  scrollbar-width: thin;
+  background: transparent;
+} */
 
+
+.scroll-container::-webkit-scrollbar {
+  scrollbar-width: thin;
+  display: none;
+   /* Hide the scrollbar in WebKit browsers (like Chrome and Safari) */
+}
 
 
 
@@ -202,6 +217,66 @@ body {
   opacity: 0.15;
 }
 
+.bg {
+  background-image: radial-gradient(
+      at 27% 37%,
+      hsla(215, 98%, 61%, 1) 0px,
+      transparent 0%
+    ),
+    radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 1) 0px, transparent 50%),
+    radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 1) 0px, transparent 50%),
+    radial-gradient(at 10% 29%, hsla(256, 96%, 67%, 1) 0px, transparent 50%),
+    radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 1) 0px, transparent 50%),
+    radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 1) 0px, transparent 50%),
+    radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 1) 0px, transparent 50%);
+}
+.text {
+  background: radial-gradient(
+      at 27% 37%,
+      hsla(215, 98%, 61%, 1) 0px,
+      transparent 0%
+    ),
+    radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 1) 0px, transparent 50%),
+    radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 1) 0px, transparent 50%),
+    radial-gradient(at 10% 29%, hsla(256, 96%, 67%, 1) 0px, transparent 50%),
+    radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 1) 0px, transparent 50%),
+    radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 1) 0px, transparent 50%),
+    radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 1) 0px, transparent 50%);
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent; /* Make the text transparent */
+}
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+.hover-rotate {
+  transform: rotateY(0deg); /* Initial rotation (no rotation) */
+  transition: transform 1s ease-in-out; /* Set transition for smooth animation */
+}
+
+.hover-rotate:hover {
+  transform: rotateY(360deg); /* Apply the desired rotation angle on hover */
+}
+
+.animate_gradient {
+  animation: gradientAnimation 10s infinite alternate; /* Animate the background */
+}
+
+/* styles.css (or your CSS file) */
+
+.move-up {
+  transform: translateY(-100%);
+  transition: transform 0.5s ease;
+}
+
+
 @media screen and (max-width: 640px) {
   .main {
     padding: 0;
@@ -214,16 +289,33 @@ body {
   @apply relative z-10 flex justify-center items-center flex-col max-w-7xl mx-auto sm:px-16 px-6;
 }
 
+.app_wrap {
+  @apply pt-20 h-screen duration-300 transition-all
+}
+
+.t-app {
+  @apply sm:ml-[75px] sm:mt-20 ml-[50px] mt-10 md:px-2 pb-10 transition-all ease-in-out duration-300 w-full sm:max-w-full
+}
 .black_btn {
   @apply rounded-full border-1 border-slate-700  bg-black py-1.5 px-5 text-white transition-all dark:hover:bg-main-dark-bg hover:text-white text-center text-sm tracking-widest font-inter flex items-center justify-center;
 }
+.variant_btn {
+  @apply py-2 px-6  rounded-full border-1  dark:border-slate-800 border-slate-300 duration-700 transition-all hover:dark:text-white  hover:text-slate-900 hover:bg-white hover:dark:bg-main-dark-bg
+}
+.variant_side_btn {
+  @apply sm:p-2 p-1.5 rounded-xl border-1  dark:border-slate-600  border-black duration-700 transition-all hover:dark:text-white  hover:text-slate-900 hover:bg-white hover:dark:bg-main-dark-bg
+}
 
 .outline_btn {
-  @apply rounded-full border border-black bg-transparent py-1.5 px-5 text-black transition-all hover:bg-black hover:text-white text-center text-sm font-inter flex items-center justify-center;
+  @apply rounded-full border-2 drop-shadow-md bg-transparent py-3 px-5 text-black transition-all duration-500 hover:bg-slate-200  text-center text-sm font-inter flex items-center justify-center;
 }
 
 .head_text {
-  @apply mt-5 text-5xl font-extrabold  text-black sm:text-6xl;
+  @apply mt-5 text-4xl font-extrabold dark:text-white drop-shadow-md text-black sm:text-6xl;
+}
+
+.logo_text {
+  @apply  font-satoshi font-semibold tracking-wide;
 }
 
 .orange_gradient {
@@ -239,7 +331,7 @@ body {
 }
 
 .desc {
-  @apply  text-sm dark:text-gray-400 text-gray-700  sm:text-base ;
+  @apply  text-sm dark:text-gray-300 text-gray-700  sm:text-base ;
 }
 
 .search_input {
@@ -251,7 +343,7 @@ body {
 }
 
 .glassmorphism {
-  @apply   shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur;
+  @apply backdrop-filter  shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur;
 }
 
 .prompt_layout {
@@ -273,9 +365,6 @@ body {
 }
 
 /* Nav Component */
-.logo_text {
-  @apply  font-satoshi font-semibold   tracking-wide;
-}
 
 .dropdown {
   @apply z-[1000] absolute right-0 top-full mt-3 w-full p-5 rounded-lg  dark:bg-black bg-white/90 min-w-[50px] flex flex-col gap-2 justify-end items-center border-1 dark:border-slate-800 border-slate-200 backdrop-blur-md;
@@ -288,6 +377,14 @@ body {
 /* PromptCard Component */
 .prompt_card {
   @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
+}
+
+.fixed_position {
+  @apply fixed transform -translate-x-1/2 left-1/2 w-full
+}
+
+.grid_setup {
+  @apply grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4
 }
 
 .flex-center {
@@ -308,3 +405,4 @@ body {
 .flex-between {
   @apply flex justify-between items-center;
 }
+      

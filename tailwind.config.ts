@@ -2,13 +2,13 @@
 module.exports = {
   darkMode: ["media"],
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-	],
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
     container: {
       center: true,
@@ -19,57 +19,59 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        display: ['Studio-Feixen-Sans','Open Sans', 'sans-serif'],
-        body: ['Lato', 'Open Sans' ,'sans-serif'],
-        about: ['Poppins', 'Rowdies','cursive'],
-        miniabout :['Sevillana', 'cursive' ],
-        gothic: ["Euclid Circular A", 'Didact Gothic' , 'sans-serif'],
-        satoshi: ['Satoshi', 'sans-serif'],
-        inter: ['Inter', 'sans-serif'],
+        display: ["Studio-Feixen-Sans", "Open Sans", "sans-serif"],
+        body: ["Lato", "Open Sans", "sans-serif"],
+        poppins: ["Poppins", "sans-serif"],
+        eu_mongo: ['"Euclid Circular A"'],
+        about: ["Poppins", "Rowdies", "cursive"],
+        miniabout: ["Sevillana", "cursive"],
+        gothic: ["Euclid Circular A", "Didact Gothic", "sans-serif"],
+        satoshi: ["Satoshi", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
       },
 
       fontSize: {
-        14: '14px',
+        14: "14px",
       },
       backgroundColor: {
-        'main-bg': '#FAFBFB',
+        "main-bg": "#FAFBFB",
         // 'main-dark-bg': '#121212',
         // 'main-dark-bg': '#0D1117',
-        'main-dark-bg': '#121212',
-        'primary-dark-bg': '#0C0C0C',
+        "main-dark-bg": "#121212",
+        "primary-dark-bg": "#0C0C0C",
 
         // 'main-dark-bg': '#20232A',
-        'secondary-dark-bg': '#0D1117',
+        "secondary-dark-bg": "#0D1117",
 
         // 'secondary-dark-bg': '#33373E',
-        'light-gray': '#F7F7F7',
-        'half-transparent': 'rgba(0, 0, 0, 0.5)',
+        "light-gray": "#F7F7F7",
+        "half-transparent": "rgba(0, 0, 0, 0.5)",
       },
       borderWidth: {
-        1: '1px',
+        1: "1px",
       },
       borderColor: {
-        color: 'rgba(0, 0, 0, 0.1)',
+        color: "rgba(0, 0, 0, 0.1)",
       },
       width: {
-        400: '400px',
-        760: '760px',
-        780: '780px',
-        800: '800px',
-        1000: '1000px',
-        1200: '1200px',
-        1400: '1400px',
+        400: "400px",
+        760: "760px",
+        780: "780px",
+        800: "800px",
+        1000: "1000px",
+        1200: "1200px",
+        1400: "1400px",
       },
       height: {
-        80: '80px',
+        80: "80px",
       },
       minHeight: {
-        590: '590px',
+        590: "590px",
       },
       backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -127,6 +129,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
-
+  // plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+};
