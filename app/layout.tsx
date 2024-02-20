@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 
 import '@/src/styles/globals.css'
 import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from 'react-toastify';
 
 
 export const metadata: Metadata = {
@@ -17,7 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-poppins !scroll-smooth">
-        
+        <ToastContainer draggable position="bottom-right" />
+
         {children}
       </body>
     </html>

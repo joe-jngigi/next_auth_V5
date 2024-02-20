@@ -300,14 +300,14 @@ body {
   @apply rounded-full border-1 border-slate-700  bg-black py-1.5 px-5 text-white transition-all dark:hover:bg-main-dark-bg hover:text-white text-center text-sm tracking-widest font-inter flex items-center justify-center;
 }
 .variant_btn {
-  @apply py-2 px-6  rounded-full border-1  dark:border-slate-800 border-slate-300 duration-700 transition-all hover:dark:text-white  hover:text-slate-900 hover:bg-white hover:dark:bg-main-dark-bg
+  @apply py-2 px-6  rounded-full border-1  dark:border-slate-800 border-slate-300 duration-500 transition-all hover:dark:text-white  hover:text-slate-900 hover:bg-white hover:dark:bg-main-dark-bg
 }
 .variant_side_btn {
-  @apply sm:p-2 p-1.5 rounded-xl border-1  dark:border-slate-600  border-black duration-700 transition-all hover:dark:text-white  hover:text-slate-900 hover:bg-white hover:dark:bg-main-dark-bg
+  @apply sm:p-2 p-1.5 rounded-xl border-1  dark:border-slate-600  border-black duration-500 transition-all hover:dark:text-white  hover:text-slate-900 hover:bg-white hover:dark:bg-main-dark-bg
 }
 
 .outline_btn {
-  @apply rounded-full border-2 drop-shadow-md bg-transparent py-3 px-5 text-black transition-all duration-500 hover:bg-slate-200  text-center text-sm font-inter flex items-center justify-center;
+  @apply rounded-full border-2 drop-shadow-md bg-transparent py-2 px-5 text-black transition-all duration-500 hover:bg-slate-200  text-center text-sm font-inter flex items-center justify-center;
 }
 
 .head_text {

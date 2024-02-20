@@ -7,11 +7,11 @@ export const SocialInfo = () => {
   return (
     <div className="w-full gap-x-2 flex items-center">
       <button className="outline_btn w-full">
-        <FcGoogle />
+        <FcGoogle size={24} />
       </button>
 
       <button className="outline_btn  w-full">
-        <FaGithub />
+        <FaGithub size={24} />
       </button>
     </div>
   );

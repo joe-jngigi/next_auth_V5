@@ -21,3 +21,8 @@ export type T_LINKTEXTPROPS = {
   label?: string;
   href?: string;
 };
+
+export type T_VALIDATE_DATA_TYPES = {
+  success?: string;
+  error?: string;
+};
