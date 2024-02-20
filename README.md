@@ -277,3 +277,29 @@ export const loginAction = async (values: any) => {
 ```
 
 The return values works the same as having a `NextResponse` in the APIs.
+
+## PRISMA ORM
+
+An ORM, or Object-Relational Mapping, is a programming technique that enables developers to work with relational databases using an object-oriented approach. It essentially maps database tables to classes in object-oriented programming languages, and rows in those tables to objects in the programming language. Here's why you might use an ORM and in which scenarios:
+
+1. **Abstraction of Database Complexity**: ORMs abstract away much of the complexity of working directly with relational databases, providing a more intuitive and object-oriented interface for developers. This can greatly simplify database interactions and reduce the amount of SQL code that developers need to write.
+
+2. **Improved Productivity**: ORMs can boost developer productivity by automating many common database tasks, such as CRUD operations (Create, Read, Update, Delete), query generation, and object serialization/deserialization. This allows developers to focus more on application logic rather than low-level database interactions.
+
+3. **Platform Independence**: ORMs often provide a level of platform independence, allowing developers to write database-agnostic code that can easily switch between different database systems (e.g., MySQL, PostgreSQL, SQLite, etc.) without major code changes.
+
+4. **Type Safety**: Some ORMs, like Prisma, provide type safety by generating types based on the database schema. This can help catch potential errors at compile time and improve code quality.
+
+5. **Reduced SQL Injection Vulnerabilities**: ORMs typically use parameterized queries or prepared statements internally, which helps mitigate the risk of SQL injection attacks by separating SQL code from data values.
+
+Scenarios where you might consider using an ORM include:
+
+- **Rapid Application Development**: ORMs can be particularly useful in scenarios where speed of development is crucial, such as prototyping or building minimum viable products (MVPs).
+  
+- **Complex Data Models**: When dealing with complex data models or relationships between multiple tables, ORMs can simplify the process of fetching and manipulating data.
+
+- **Multi-Database Support**: If your application needs to support multiple database systems, an ORM can abstract away the differences between them, making it easier to switch between databases or support multiple databases simultaneously.
+
+- **Team Collaboration**: ORMs can facilitate collaboration among team members, as they provide a common abstraction layer that all developers can work with, regardless of their level of expertise with SQL or the specific database system being used.
+
+However, it's worth noting that while ORMs offer many benefits, they may not be suitable for all scenarios. In some cases, especially when dealing with complex database queries or performance-critical applications, writing custom SQL queries may be more appropriate. Additionally, there can be a learning curve associated with using ORMs effectively, and they may introduce some overhead in terms of performance or flexibility compared to raw SQL.
