@@ -38,6 +38,7 @@ export const RegisterForm = () => {
       registerAction(values).then((data: T_VALIDATE_DATA_TYPES) => {
         toast.error(data.error, { theme: "colored" });
         toast.success(data.success, { theme: "colored" });
+        toast.info(data.info, { theme: "colored" });
       });
       //  toast.success("User Test", {theme: "colored"});
     });

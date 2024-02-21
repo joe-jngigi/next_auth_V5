@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import '@/src/styles/globals.css'
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from 'react-toastify';
+import { data_base } from '@/src/lib/prisma-db';
 
 
 export const metadata: Metadata = {
@@ -15,6 +16,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  
   return (
     <html lang="en">
       <body className="font-poppins !scroll-smooth">

@@ -17,6 +17,10 @@ pnpm dev
 bun dev
 ```
 
+## Bcrypt
+
+Bcypt is used to has the passwords used in the project. We install it using `npm install bcrypt` and `npm install -D @types/bcrypt`
+
 ## Zod
 
 Zod is a TypeScript-first schema declaration and validation library. It allows you to define schemas for your data and validate that data against those schemas. This below shows how we can define schemas:
@@ -253,7 +257,7 @@ The `useForm` hook from React Hook Form provides a set of functions and methods 
 
 These are some of the main functions provided by `useForm`, but there are others as well. You can use these functions to build complex forms and handle form interactions in your React applications.
 
-## Getting Started With Server Actions
+# Getting Started With Server Actions
 
 On this project, I have utilized the server actions. This is the same as using the API's routes, but it is more simple to utilise when making database requests. Here is an example of a **server action** code. 
 
@@ -303,3 +307,100 @@ Scenarios where you might consider using an ORM include:
 - **Team Collaboration**: ORMs can facilitate collaboration among team members, as they provide a common abstraction layer that all developers can work with, regardless of their level of expertise with SQL or the specific database system being used.
 
 However, it's worth noting that while ORMs offer many benefits, they may not be suitable for all scenarios. In some cases, especially when dealing with complex database queries or performance-critical applications, writing custom SQL queries may be more appropriate. Additionally, there can be a learning curve associated with using ORMs effectively, and they may introduce some overhead in terms of performance or flexibility compared to raw SQL.
+
+## Prisma Initializatoon
+
+```TS
+/**
+ * We @initialize @param globalThis in development because of hot reloading. If we don't do that, it will always initialize a new @function PrismaClient
+ * everytime it reloads that we have too may active prisma clients.
+ * In production, we always initialize it like this:
+ * @param export const @var db = new @function PrismaClient()
+ */
+ ```
+
+Having too many active Prisma clients can lead to several potential issues:
+
+1. **Resource Consumption**: Each active Prisma client consumes system resources, including memory and potentially CPU cycles. If a large number of clients are created and kept active unnecessarily, it can lead to excessive resource consumption, potentially impacting the performance and stability of the application and the host system.
+
+2. **Connection Pool Exhaustion**: Prisma clients typically use connection pooling to manage database connections efficiently. Each client maintains a pool of database connections that it can reuse to execute queries. If too many clients are created, it can lead to connection pool exhaustion, where there are not enough available connections to serve incoming requests. This can result in connection timeouts, errors, or degraded performance.
+
+3. **Database Load**: Each active Prisma client may result in one or more connections to the underlying database server. If there are too many active clients, it can increase the load on the database server, potentially leading to performance degradation or even server overload.
+
+4. **Concurrency Issues**: Depending on the database system and configuration, excessive concurrent connections from multiple clients may lead to contention and concurrency issues, such as locking or blocking. This can impact the scalability and responsiveness of the application.
+
+5. **Cost**: In cloud environments or situations where resources are metered or billed based on usage, having too many active clients may result in higher costs due to increased resource consumption.
+
+While having multiple active Prisma clients may not inherently be problematic, excessive client creation and retention can lead to various issues related to resource consumption, performance, scalability, and cost. Therefore, it's generally advisable to manage the number of active clients efficiently to ensure optimal performance and resource utilization.
+
+---
+
+**Prisma Installation**<br/>
+
+After installtion of prisma using `npm install prisma` and `npm install prisma/client`, we run `npx prisma init` which will add a _**prisma folder**_ and an _**env file**_
+
+Take note of:<br/>
+```bash
+
+npm i --save-dev prisma@latest                       │
+npm i @prisma/client@latest
+
+```
+
+After that we go to the database. In this case I am using the neon database, where we I will create the database. Remember to choose the prisma ORM and then copy the connection setup and the environment variables.
+
+After we have initialized everything, now we go to our Prisma ORM folder where we have initialized our database and add our first model (This is like the table in the database). We will the initialize the model so that we can use it globaly using the db client we had initialized earlier.
+
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+On this front, we have already managed to connect to the database and pushed our models. the only thing remaining is for us to be able send the data to the database. As we have already started with the code on server actions.
+
+On this we see how we can write a `server action function`, where we recieve the userInput values from the front end part. The data us then verified using `zod`
+
+```TS
+export const registerAction = async (userInputValues: <zod.infer<typeof RegisterSchema>>) =>{
+  
+}
+```
+
+This part is inside the server action function where we can now validate the data received from the fron't end by calling the given function. In the frontend, we are using the `useTransition()` react function. We can also do a selfverification. The data is further passed in a typesafe zod schema object, where it verifies the types are correct
+
+```TS
+const validateInputData = RegisterSchema.ParseSafe(userInputVales)
+if (!validateRegisterValues) {
+  return { error: "Please check your input details" };
+}
+```
+
+On this section, we have to now destructure the data that is recieved after the typesafe check. It has `data` and `success` inside. We need the data part, which is further destructured to have the individual data so we can send it to the database. Also here we can also now hash the password as shown.
+```TS
+if (!validateRegisterValues.success) {
+        // Safe to destructure here
+        return { error: "Check you details" };
+    }
+
+    const { email, password, name } = validateRegisterValues.data;
+
+    const hashedPassword = await hash(password, 10)
+    
+    const existing_user = await getUserByEmail(email);
+    if (existing_user) {
+        return {info: "User Already exists"}
+    }
+```
+
+This section now creates an entity in the database using the destructured data.
+```TS
+ await data_base.user.create({
+        data: {
+            email,
+            name,
+            password: hashedPassword
+        }
+    })
+```
+
+
