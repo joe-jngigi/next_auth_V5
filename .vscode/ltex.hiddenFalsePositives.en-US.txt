@@ -1,0 +1,4 @@
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QformState: This object contains the current state of the form, including whether it's dirty, valid, submitting, etc.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QgetValues: This function is used to get the current values of all registered inputs in the form.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QsetValue: This function is used to programmatically set the value of a form input.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QhandleSubmit: This function is used to handle form submissions.\\E$"}
