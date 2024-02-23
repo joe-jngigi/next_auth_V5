@@ -1,5 +1,5 @@
 {
-  "name": "next__auth_admin",
+  "name": "next_auth_admin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -19,7 +19,7 @@
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
-    "next": "^14.1.1-canary.69",
+    "next": "^14.1.1-canary.70",
     "next-auth": "^5.0.0-beta.13",
     "react": "^18",
     "react-dom": "^18",

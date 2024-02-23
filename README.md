@@ -1,5 +1,6 @@
 # Getting Started with Next Auth
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). Normally I use the Next.Js Canary channel; which I initialize using:
+
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). Normally I use the Next.js Canary channel; which I initialize using:
 
 ```bash
 npm install next@canary
@@ -17,13 +18,13 @@ pnpm dev
 bun dev
 ```
 
-## Bcrypt
+## `Bcrypt`
 
-Bcypt is used to has the passwords used in the project. We install it using `npm install bcrypt` and `npm install -D @types/bcrypt`
+`Bcrypt` is used to hash the passwords used in the project. We install it using `npm install bcrypt` and `npm install -D @types/bcrypt`
 
-## Zod
+## zod
 
-Zod is a TypeScript-first schema declaration and validation library. It allows you to define schemas for your data and validate that data against those schemas. This below shows how we can define schemas:
+zod is a TypeScript-first schema declaration and validation library. It allows you to define schemas for your data and validate that data against those schemas. This below shows how we can define schemas:
 
 ```TS
 import { z } from 'zod';
@@ -61,9 +62,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
 the line `const data ` has `userSchema.parse()`, which is used to validate the incoming data against the defined schema. If the data is valid, it proceeds as expected. If not, it throws an error which can be caught to handle invalid data.
 
-**How does Zod work using React-Hook-Form** <br/>
+**How does zod work using React-Hook-Form** <br/>
 
-The code snippet provided is using the `useForm` hook from a form library, likely React Hook Form, and it's integrated with Zod for form validation.
+The code snippet provided is using the `useForm` hook from a form library, likely React Hook Form, and it's integrated with zod for form validation.
 
 ```TS
   const form = useForm<zod.infer<typeof LoginSchema>>({
@@ -78,17 +79,17 @@ The code snippet provided is using the `useForm` hook from a form library, likel
 
 1. **`useForm` Hook**: This hook is the form library React Hook Form. It's used to manage form state and handle form submissions.
 
-2. **`<zod.infer<typeof LoginSchema>>`**: This part is using TypeScript's `infer` keyword along with Zod's types. `infer` is used to extract the type from a Zod schema. So, `zod.infer<typeof LoginSchema>` extracts the type of data that conforms to the `LoginSchema`.
+2. **`<zod.infer<typeof LoginSchema>>`**: This part is using TypeScript's `infer` keyword along with zod's types. `infer` is used to extract the type from a zod schema. So, `zod.infer<typeof LoginSchema>` extracts the type of data that conforms to the `LoginSchema`.
 
-3. **`resolver: zodResolver(LoginSchema)`**: This line configures the resolver for the form. The `zodResolver` function is provided by a library that integrates Zod with form validation. It takes the `LoginSchema` as an argument and generates a resolver for the form that uses Zod for validation.
+3. **`resolver: zodResolver(LoginSchema)`**: This line configures the resolver for the form. The `zodResolver` function is provided by a library that integrates zod with form validation. It takes the `LoginSchema` as an argument and generates a resolver for the form that uses zod for validation.
 
 4. **`defaultValues`**: This specifies the default values for the form fields. In this case, it sets the initial values for the email and password fields to empty strings.
 
 The `LoginSchema` defines the shape and validation rules for the form data, and the form is configured to use this schema for validation via the `resolver` option. The `defaultValues` object provides initial values for the form fields.
 
-**How Zod works on bare JSX**
+**How zod works on bare JSX**
 
-If you're working with bare-metal JSX without libraries like React Hook Form, you can still use Zod for client-side data validation. You'll need to handle the form submission and validation logic manually. Here's a basic example of how you can achieve this:
+If you're working with bare-metal JSX without libraries like React Hook Form, you can still use zod for client-side data validation. You'll need to handle the form submission and validation logic manually. Here's a basic example of how you can achieve this:
 
 ```TS
 import { useState } from 'react';
@@ -178,15 +179,15 @@ export default MyForm;
 In this example:
 
 - We define a form component (`MyForm`) that manages form state using `useState`.
-- On form submission, we validate the form data against the Zod schema (`userSchema`). If validation fails, we catch the error and set the validation errors state. If validation succeeds, we proceed with form submission.
+- On form submission, we validate the form data against the zod schema (`userSchema`). If validation fails, we catch the error and set the validation errors state. If validation succeeds, we proceed with form submission.
 - Validation errors are displayed below each form field.
 - The form is reset after successful submission.
 
-This approach demonstrates how you can use Zod for client-side data validation in a bare-metal JSX environment without relying on additional form libraries like React Hook Form.
+This approach demonstrates how you can use zod for client-side data validation in a bare-metal JSX environment without relying on additional form libraries like React Hook Form.
 
 ## React Hook Form
 
-If you want to use React Hook Form without using Zod as a resolver for validation, you can still define your validation logic separately and integrate it with React Hook Form. Here's a basic example of how you can achieve this:
+If you want to use React Hook Form without using zod as a resolver for validation, you can still define your validation logic separately and integrate it with React Hook Form. Here's a basic example of how you can achieve this:
 
 ```TSX
 import React from 'react';
@@ -259,7 +260,7 @@ These are some main functions provided by `useForm`, but there are others as wel
 
 # Getting Started With Server Actions
 
-On this project, I have utilized the server actions. This is the same as using the API's routes, but it is more simple to utilize when making database requests. Here is an example of a **server action** code. 
+On this project, I have utilized the server actions. This is the same as using the API's routes, but it is more simple to utilize when making database requests. Here is an example of a **server action** code. The return values work the same as having a `NextResponse` in the APIs.
 
 ```TS
 "use server"
@@ -274,13 +275,11 @@ export const loginAction = async (values: any) => {
 
     console.log("validatedFieldValues", validatedFieldValues);
     return { success: "Email Sent" }
-    
 
-    
+
+
 }
 ```
-
-The return values works the same as having a `NextResponse` in the APIs.
 
 ## PRISMA ORM
 
@@ -299,7 +298,6 @@ An ORM, or Object-Relational Mapping, is a programming technique that enables de
 Scenarios where you might consider using an ORM include:
 
 - **Rapid Application Development**: ORMs can be particularly useful in scenarios where speed of development is crucial, such as prototyping or building minimum viable products (MVPs).
-  
 - **Complex Data Models**: When dealing with complex data models or relationships between multiple tables, ORMs can simplify the process of fetching and manipulating data.
 
 - **Multi-Database Support**: If your application needs to support multiple database systems, an ORM can abstract away the differences between them, making it easier to switch between databases or support multiple databases simultaneously.
@@ -308,7 +306,7 @@ Scenarios where you might consider using an ORM include:
 
 However, it's worth noting that while ORMs offer many benefits, they may not be suitable for all scenarios. In some cases, especially when dealing with complex database queries or performance-critical applications, writing custom SQL queries may be more appropriate. Additionally, there can be a learning curve associated with using ORMs effectively, and they may introduce some overhead in terms of performance or flexibility compared to raw SQL.
 
-## Prisma Initializatoon
+## Prisma Initialization
 
 ```TS
 /**
@@ -317,7 +315,7 @@ However, it's worth noting that while ORMs offer many benefits, they may not be 
  * In production, we always initialize it like this:
  * @param export const @var db = new @function PrismaClient()
  */
- ```
+```
 
 Having too many active Prisma clients can lead to several potential issues:
 
@@ -337,9 +335,10 @@ While having multiple active Prisma clients may not inherently be problematic, e
 
 **Prisma Installation**<br/>
 
-After installtion of prisma using `npm install prisma` and `npm install prisma/client`, we run `npx prisma init` which will add a _**prisma folder**_ and an _**env file**_
+After installation of prisma using `npm install prisma` and `npm install prisma/client`, we run `npx prisma init` which will add a _**prisma folder**_ and an _**env file**_
 
 Take note of:<br/>
+
 ```bash
 
 npm i --save-dev prisma@latest                       │
@@ -356,13 +355,13 @@ npx prisma generate
 npx prisma db push
 ```
 
-On this front, we have already managed to connect to the database and pushed our models. The only thing remaining is for us to be able send the data to the database. As we have already started with the code on server actions.
+On this front, we have already managed to connect to the database and pushed our models. The only thing remaining is for us to be able to send the data to the database. As we have already started with the code on server actions.
 
 On this we see how we can write a `server action function`, where we receive the userInput values from the front end part. The data us then verified using `zod`
 
 ```TS
 export const registerAction = async (userInputValues: <zod.infer<typeof RegisterSchema>>) =>{
-  
+
 }
 ```
 
@@ -376,6 +375,7 @@ if (!validateRegisterValues) {
 ```
 
 On this section, we have to now destructure the data that is received after the typesafe check. It has `data` and `success` inside. We need the data part, which is further destructured to have the individual data, so we can send it to the database. Also, here we can also now hash the password as shown.
+
 ```TS
 if (!validateRegisterValues.success) {
         // Safe to destructure here
@@ -385,7 +385,7 @@ if (!validateRegisterValues.success) {
     const { email, password, name } = validateRegisterValues.data;
 
     const hashedPassword = await hash(password, 10)
-    
+
     const existing_user = await getUserByEmail(email);
     if (existing_user) {
         return {info: "User Already exists"}
@@ -393,6 +393,7 @@ if (!validateRegisterValues.success) {
 ```
 
 This section now creates an entity in the database using the destructured data.
+
 ```TS
  await data_base.user.create({
         data: {
@@ -481,4 +482,115 @@ Some frameworks and platforms have specific implementations of "edge runtime" wi
 
 `TLDR`: Remember edge is an environment.
 
+ORMS, by now in 2024 February, like Prisma does not work on edge. which means we are will not be able to use a lot of callbacks and events in the `auth.ts` file. To go around this, we need to separate the auth config, and use the config in the middleware. What do I mean by this?
 
+_We were importing the `auth.ts` file that contains the route handler for authentication from the route folder, into the middleware. Since the prisma adapter does not work on the edge runtime, whereas the middleware works on the **edge runtime**_
+
+`import { auth } from "./auth"`
+
+That means that we will use the file `auth.config.ts` to trigger the middleware and not the one we were using earlier; `auth.ts`. This is the `auth.ts` file
+
+```TS
+import NextAuth from "next-auth";
+
+import authConfig from "@/auth.config";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { data_base } from "@/src/lib/prisma-db";
+console.log("AuthConfig: ", authConfig);
+
+export const {
+  handlers: { GET, POST },
+  auth,
+} = NextAuth({
+  adapter: PrismaAdapter(data_base),
+  ...authConfig,
+});
+
+```
+
+In the documentation, they have the code a little different and this is because for this project that is not in production, I have the `prismaClient` in a different file, that is explained why it is like that. In the documentation they have the prisma client initialized in the config file
+
+```TS
+import NextAuth from "next-auth"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { PrismaClient } from "@prisma/client"
+import authConfig from "./auth.config"
+
+const prisma = new PrismaClient()
+
+export const { handlers, auth } = NextAuth({
+  adapter: PrismaAdapter(prisma),
+  session: { strategy: "jwt" },
+  ...authConfig,
+})
+```
+
+The `authConfig` file simply has an object that has the object of the auth providers. Which when we log it out in the `auth.ts` file it gives us this: `{ providers: [ [Function: GitHub] ] }`
+
+```TS
+import type { NextAuthConfig } from "next-auth";
+import GitHub from "next-auth/providers/github";
+
+export default {
+  providers: [GitHub],
+} satisfies NextAuthConfig;
+```
+
+### What role does `PrismaAdapter` play in all this?
+
+The `PrismaAdapter` plays a crucial role in bridging your `NextAuth.js` authentication flow with the Prisma database. Here's a breakdown of its significance:
+
+**What is NextAuth.js?**
+
+NextAuth.js is a popular library for implementing user authentication in Next.js applications. It simplifies the process of handling user sign-in, sign-out, session management, and integration with various authentication providers.
+
+**What is Prisma?**
+
+Prisma is an object-relational mapper (ORM) that simplifies interacting with relational databases in Node.js and TypeScript applications. It allows you to define your database schema and access data using a more intuitive API.
+
+**What does `PrismaAdapter` do?**
+
+The `PrismaAdapter` from `@auth/prisma-adapter` acts as an adapter between NextAuth.js and Prisma. It translates the operations required by NextAuth.js (e.g., creating users, storing session data) into valid Prisma queries and operations. This eliminates the need for manual database interaction and ensures compatibility between your authentication flow and your database schema.
+
+**Specifically, `PrismaAdapter` handles tasks like:**
+
+- **User management:** Creating new users, fetching user information, updating user data.
+- **Session management:** Storing and retrieving session data in your Prisma database.
+- **OAuth's integration:** Linking OAuth accounts to user profiles in your database.
+- **Customizations:** You can extend the adapter to handle specific needs or integrate with custom logic.
+
+**In the code:**
+
+- We are importing `PrismaAdapter` and providing the `data_base` instance from your `prisma-db` file.
+- I then set the `adapter` option in the `NextAuth` configuration to use the `PrismaAdapter`.
+- This allows NextAuth.js to seamlessly interact with your Prisma database for user and session management.
+
+### Middleware Validation
+
+In the code, the import from the routes, which contains strings of different routes in the project. This is necessary so, we can render the routes conditionally, so that, I can have protected routes according to the user sessions.
+
+```TS
+import {
+  DEFAULT_LOGIN_REDIRECT,
+  authAPIPrefix,
+  authRoutes,
+  publicRoutes,
+} from "@/routes";
+
+export default auth((req) => {
+  const { nextUrl } = req;
+  const isLoggedIn = !!req.auth;
+
+  /**
+   * This will return a boolean value based on::
+   * The URL returned is compared against the pathname from the url is the same as the specified public routes
+   *
+   * @function {includes} Determines whether an array includes a certain element, returning true or false as appropriate.
+   * @type { boolean }
+   */
+  const isPublicRoute: boolean = publicRoutes.includes(nextUrl.pathname);
+  const isAPIAuthRoute: boolean = nextUrl.pathname.startsWith(authAPIPrefix);
+  const isAuthRoute: boolean = authRoutes.includes(nextUrl.pathname)
+  
+});
+```

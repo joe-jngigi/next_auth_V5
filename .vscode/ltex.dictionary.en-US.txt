@@ -4,3 +4,8 @@ typesafe
 zod
 userInput
 Vercel
+ORMS
+Prisma
+prisma
+PRISMA
+ORMs

@@ -2,3 +2,6 @@
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QgetValues: This function is used to get the current values of all registered inputs in the form.\\E$"}
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QsetValue: This function is used to programmatically set the value of a form input.\\E$"}
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QhandleSubmit: This function is used to handle form submissions.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QImproved Productivity: ORMs can boost developer productivity by automating many common database tasks, such as CRUD operations (Create, Read, Update, Delete), query generation, and object serialization/deserialization.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QRapid Application Development: ORMs can be particularly useful in scenarios where speed of development is crucial, such as prototyping or building minimum viable products (MVPs).\\E$"}
+{"rule":"SENTENCE_WHITESPACE","sentence":"^\\QImportant Code\\E$"}
