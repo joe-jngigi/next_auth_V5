@@ -19,7 +19,7 @@ export const authRoutes: string[] = ["/auth/login", "/auth/register"];
  * The default path is: "/api/auth"
  * @type {string}
  */
-export const authAPIPrefix: string = "/api/auth";
+export const authAPIPrefix: string = "/api/auth/";
 
 /**
  * The default redirect login route

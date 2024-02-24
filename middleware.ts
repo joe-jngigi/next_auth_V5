@@ -22,7 +22,7 @@ export default auth((req) => {
    * @type { boolean }
    */
   const isPublicRoute: boolean = publicRoutes.includes(nextUrl.pathname);
-  const isAPIAuthRoute: boolean = nextUrl.pathname.startsWith(authAPIPrefix);
+  const isAPIAuthRoute = nextUrl.pathname.startsWith(authAPIPrefix);
   const isAuthRoute: boolean = authRoutes.includes(nextUrl.pathname);
 
   /**
@@ -31,10 +31,9 @@ export default auth((req) => {
    *
    * That is first allow every single API route.
    */
+
   if (isAPIAuthRoute) {
-    console.log(nextUrl.pathname);
-    
-    return new Error ("This is an api root");
+    return;
   }
 
   /**
@@ -45,18 +44,23 @@ export default auth((req) => {
    * On this, when the isAuthroute is true, it means you are in either of the above routes. If false you are in another page.
    *
    * when I return null, it means it is true, hence it executes the code.
-   * 
+   *
    * Hence it checks the isLoggedIn. If this is true, it redirect to the DEFAULT_LOGIN_REDIRECT page.
-   * If the loggin is false, it will not redirect to that page, 
+   * If the loggin is false, it will not redirect to that page,
    *
    * @boolean { isLoggedIn }
+   *
+   * In the login, we return the Response, and from the response we get the redirect function, where we initialize a redirect URL
+   * we pass in the second argument, which in turn allows to create an absolute URL. like
+   * @url {http://localhost:3000/auth/login}
    */
   if (isAuthRoute) {
     if (isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
 
-    return null;
+    // By this, we mean that we will always allow people to visit the auth route
+    return;
   }
 
   

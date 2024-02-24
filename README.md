@@ -594,3 +594,39 @@ export default auth((req) => {
   
 });
 ```
+  ```TS
+  const { nextUrl } = req;
+  const isLoggedIn = !!req.auth;
+  ```
+
+This will return a boolean value based on::The URL returned is compared against the `pathname` from the `url` is the same as the specified public routes
+
+`@function {includes}`Determines whether an array includes a certain element, returning true or false as appropriate.
+ `@type { boolean }`
+
+  ```TS
+  const isPublicRoute: boolean = publicRoutes.includes(nextUrl.pathname);
+  const isAPIAuthRoute = nextUrl.pathname.startsWith(authAPIPrefix);
+  const isAuthRoute: boolean = authRoutes.includes(nextUrl.pathname);``
+  ```
+
+What this is doing is that it is confirming whether the current `param URLS` API routes is prefixed by the `@path { "/api/auth"}`. If that is the case it goes on to return a null value. That is first allowed every single API route.
+
+```TS
+if (isAPIAuthRoute) {
+  return;
+}
+```
+
+ We then go check the auth routes. While technically they are public routes, we did not include them in the public routes. Otherwise, you are left in an infinite redirect loop. The auth routes include `@param {["/auth/login", "/auth/register"]}`
+ On this, when the `isAuthroute` is true, it means you are in either of the above routes. If false you are in another page. When I return null, it means it is true, hence it executes the code. Hence it checks the `isLoggedIn`. If this is true, it redirects to the DEFAULT_LOGIN_REDIRECT page.
+ 
+ If the login is false, it will not redirect to that page, `@boolean { isLoggedIn }`. In the login, we return the Response, and from the response we get the redirect function, where we initialize a redirect URL we pass in the second argument, which in turn allows to create an absolute URL. like `@url {http://localhost:3000/auth/login}`
+
+  ```TS
+  if (isAuthRoute) {
+    if (isLoggedIn) {
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    }
+  }
+```
