@@ -396,12 +396,12 @@ This section now creates an entity in the database using the destructured data.
 
 ```TS
  await data_base.user.create({
-        data: {
-            email,
-            name,
-            password: hashedPassword
-        }
-    })
+    data: {
+      email,
+      name,
+      password: hashedPassword
+    }
+  })
 ```
 
 # Auth Version 5
@@ -591,42 +591,94 @@ export default auth((req) => {
   const isPublicRoute: boolean = publicRoutes.includes(nextUrl.pathname);
   const isAPIAuthRoute: boolean = nextUrl.pathname.startsWith(authAPIPrefix);
   const isAuthRoute: boolean = authRoutes.includes(nextUrl.pathname)
-  
+
 });
 ```
-  ```TS
-  const { nextUrl } = req;
-  const isLoggedIn = !!req.auth;
-  ```
+
+```TS
+const { nextUrl } = req;
+const isLoggedIn = !!req.auth;
+```
 
 This will return a boolean value based on::The URL returned is compared against the `pathname` from the `url` is the same as the specified public routes
 
 `@function {includes}`Determines whether an array includes a certain element, returning true or false as appropriate.
- `@type { boolean }`
+`@type { boolean }`
 
-  ```TS
-  const isPublicRoute: boolean = publicRoutes.includes(nextUrl.pathname);
-  const isAPIAuthRoute = nextUrl.pathname.startsWith(authAPIPrefix);
-  const isAuthRoute: boolean = authRoutes.includes(nextUrl.pathname);``
-  ```
+```TS
+const isPublicRoute: boolean = publicRoutes.includes(nextUrl.pathname);
+const isAPIAuthRoute = nextUrl.pathname.startsWith(authAPIPrefix);
+const isAuthRoute: boolean = authRoutes.includes(nextUrl.pathname);``
+```
 
 What this is doing is that it is confirming whether the current `param URLS` API routes is prefixed by the `@path { "/api/auth"}`. If that is the case it goes on to return a null value. That is first allowed every single API route.
 
 ```TS
 if (isAPIAuthRoute) {
-  return;
+  return null;
 }
 ```
 
- We then go check the auth routes. While technically they are public routes, we did not include them in the public routes. Otherwise, you are left in an infinite redirect loop. The auth routes include `@param {["/auth/login", "/auth/register"]}`
- On this, when the `isAuthroute` is true, it means you are in either of the above routes. If false you are in another page. When I return null, it means it is true, hence it executes the code. Hence it checks the `isLoggedIn`. If this is true, it redirects to the DEFAULT_LOGIN_REDIRECT page.
- 
- If the login is false, it will not redirect to that page, `@boolean { isLoggedIn }`. In the login, we return the Response, and from the response we get the redirect function, where we initialize a redirect URL we pass in the second argument, which in turn allows to create an absolute URL. like `@url {http://localhost:3000/auth/login}`
+We then go check the auth routes. While technically they are public routes, we did not include them in the public routes. Otherwise, you are left in an infinite redirect loop. The auth routes include `@param {["/auth/login", "/auth/register"]}`
+On this, when the `isAuthroute` is true, it means you are in either of the above routes. If false you are in another page. When I return null, it means it is true, hence it executes the code. Hence, it checks the `isLoggedIn`. If this is true, it redirects to the DEFAULT_LOGIN_REDIRECT page.
 
-  ```TS
-  if (isAuthRoute) {
-    if (isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-    }
+If the login is false, it will not redirect to that page, `@boolean { isLoggedIn }`. In the login, we return the Response, and from the response we get the redirect function, where we initialize a redirect URL we pass in the second argument, which in turn allows to create an absolute URL. like `@url {http://localhost:3000/auth/login}`
+
+```TS
+if (isAuthRoute) {
+  if (isLoggedIn) {
+    return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   }
+}
+```
+
+On providers, in `auth.config.ts`
+
+```TS
+import type { NextAuthConfig } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { compare } from "bcrypt";
+
+import { LoginSchema } from "@/src/schemas";
+import { getUserByEmail } from "./src/data/user_data";
+
+export default {
+  providers: [
+    Credentials({
+      // Start Custom Credentials Providers setup
+      async authorize(credentials) {
+        const validatedLoginData = LoginSchema.safeParse(credentials);
+
+        if (validatedLoginData.success) {
+          const { email, password } = validatedLoginData.data;
+
+          /**
+           * After we have validated the credentials we received from the custom user, we now have to check two things
+           * if the user exists, through the email.
+           *
+           * Check whether the user signed up by other providers.
+           * In this case, if the user signed up, and they don't have a password, they will use the provider.
+           *
+           * if none of this is true, then it returns a null value, prompting the user to signup
+           */
+          const user = await getUserByEmail(email);
+
+          if (!user || !user.password) {
+            return null;
+          }
+
+          const matchedPassword = await compare(password, user.password);
+
+          if (matchedPassword) {
+            return user;
+          }
+        }
+
+        return null;
+      },
+      // End
+    }),
+  ],
+} satisfies NextAuthConfig;
+
 ```

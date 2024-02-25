@@ -21,12 +21,10 @@ export const LoginForm = () => {
   const form = useForm<zod.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: "josephngigi775",
-      password: "123455",
+      email: "",
+      password: "",
     },
   });
-
-  console.log(form.control);
   
 
   // This will spread a set of functions from the useForm

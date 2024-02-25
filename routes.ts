@@ -25,4 +25,4 @@ export const authAPIPrefix: string = "/api/auth/";
  * The default redirect login route
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT: string = "/settings"
+export const DEFAULT_LOGIN_REDIRECT: string = "/settings";

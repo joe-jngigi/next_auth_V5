@@ -29,6 +29,8 @@ export default auth((req) => {
    * What this is doing is that it is confirming whether the current param URLS API routes is prefixed by
    * the @path { "/api/auth"}. If that is the case it goes on to return a null value.
    *
+   * Note, on return, this is supposed to give the page. If not true it will not return the page,
+   * just break or go to the next code
    * That is first allow every single API route.
    */
 
@@ -63,13 +65,16 @@ export default auth((req) => {
     return;
   }
 
-  
-});
+  /**
+   * If you are not logged in; ie isLoggedIn is false and the it is not a publicRoutes, we redirect to the login page.
+   * @type {boolean}
+   */
+  if (!isLoggedIn && !isPublicRoute) {
+    return Response.redirect(new URL("/auth/login", nextUrl));
+  }
 
-// Optionally, don't invoke Middleware on some paths
-export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-};
+  return;
+});
 
 /**
  * The @expression matcher is used to invoke the @function auth()
@@ -81,4 +86,10 @@ export const config = {
  *  console.log("Is logged in Status: ", isLoggedIn);
  *
  * This returns a boolean state, when we add the exclamation marks, otherwise it will return a null value.
+ * 
+ * Optionally, don't invoke Middleware on some paths
  */
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};
+
