@@ -5,3 +5,4 @@
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QImproved Productivity: ORMs can boost developer productivity by automating many common database tasks, such as CRUD operations (Create, Read, Update, Delete), query generation, and object serialization/deserialization.\\E$"}
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QRapid Application Development: ORMs can be particularly useful in scenarios where speed of development is crucial, such as prototyping or building minimum viable products (MVPs).\\E$"}
 {"rule":"SENTENCE_WHITESPACE","sentence":"^\\QImportant Code\\E$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\QSuppose I have multiple user where we have like normal \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q, and then we probably have an \\E(?:Dummy|Ina|Jimmy-)[0-9]+$"}

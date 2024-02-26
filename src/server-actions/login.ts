@@ -5,7 +5,6 @@ import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 
 import { LoginSchema } from "@/src/schemas/index";
-import { getUserByEmail } from "../data/user_data";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export const loginAction = async (values: zod.infer<typeof LoginSchema>) => {
@@ -24,13 +23,12 @@ export const loginAction = async (values: zod.infer<typeof LoginSchema>) => {
       email,
       password,
     });
+    return { success: "Email Sent" };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { error: "Invalid Credentials" };
-        case "EmailSignInError":
-          return { info: "Email does not exist" };
+          return { error: "Invalid Credentials Error" };
         default:
           return { info: "something went wrong" };
       }
@@ -40,5 +38,4 @@ export const loginAction = async (values: zod.infer<typeof LoginSchema>) => {
   }
 
   // console.log("validatedFieldValues", validatedFieldValues);
-  return { success: "Email Sent" };
 };

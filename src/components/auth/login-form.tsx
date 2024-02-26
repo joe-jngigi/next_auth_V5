@@ -25,7 +25,6 @@ export const LoginForm = () => {
       password: "",
     },
   });
-  
 
   // This will spread a set of functions from the useForm
   /**
@@ -35,10 +34,19 @@ export const LoginForm = () => {
   const onSubmit = (values: zod.infer<typeof LoginSchema>) => {
     setTransition(() => {
       loginAction(values).then((data: T_VALIDATE_DATA_TYPES) => {
-        toast.error(data.error, { theme: "colored" });
-        toast.success(data.success, { theme: "colored" });
+        if (data) {
+          if (data.error) {
+            toast.error(data.error, { theme: "colored" });
+            return;
+          }
+          toast.info(data.info, { theme: "colored" });
+          return;
+        }
+        console.log(data);
+        toast.success("Logged in successfully", { theme: "colored" });
+        // toast.error(data.error, { theme: "colored" });
       });
-      //  toast.success("User Test", {theme: "colored"});
+      //
     });
   };
 

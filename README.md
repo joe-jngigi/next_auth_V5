@@ -682,3 +682,284 @@ export default {
 } satisfies NextAuthConfig;
 
 ```
+
+## The auth.ts file
+
+**Here's a breakdown of the role of the `auth.ts` file in `NextAuth` v5 authentication:**
+
+**1. Central Configuration:**
+
+- Serves as the heart of authentication configuration for your Next.js application.
+- Consolidates configuration options for providers, database adapters, session management, and authentication flows.
+
+**2. Essential Imports:**
+
+- **`NextAuth`:** Imports the core `NextAuth` library for authentication functionality.
+- **`authConfig`:** Imports a separate configuration file (likely containing sensitive information) for enhanced organization and security.
+- **`PrismaAdapter`:** Imports a custom database adapter (in this case, for Prisma) to interact with your chosen database.
+- **data_base:** Imports a reference to your Prisma database client for adapter usage.
+
+**3. `NextAuth` Instance Creation:**
+
+- Creates a new `NextAuth` instance with these key configurations:
+  - **adapter:** Specifies the `PrismaAdapter` to handle database interactions for user accounts.
+  - **session:** Sets the session strategy to `"jwt"` for JSON Web Token-based authentication.
+  - **`...authConfig`:** Spreads additional configuration options from the imported `authConfig` file for flexibility.
+
+**4. Exported Functions and Handlers:**
+
+- **handlers:** Exports the `GET` and `POST` handlers for authentication routes, essential for handling authentication attempts and responses.
+- **`auth`:** Exports the `auth` object for accessing user session data and authentication state within your application components.
+- **`signIn`:** Exports the `signIn` function to initiate the sign-in process for specified providers.
+- **`signOut`:** Exports the `signOut` function to initiate user sign-out.
+
+In essence, the `auth.ts` file acts as the command center for Setting up authentication providers and adapters, Configuring session management, Defining authentication flows and Providing essential functions for handling authentication interactions within your Next.js application.
+
+## Session Strategy
+
+A **session strategy** in `NextAuth` v5 defines how user authentication information is stored and managed during their interaction with your application. It essentially determines how `NextAuth` handles the state of a user being logged in or out.
+
+Here are the **key aspects** of session strategies:
+
+**1. Purpose:**
+
+- Maintains user login state across different requests within a defined session duration.
+- Enable features like remembering user choices, accessing user-specific data, and restricting unauthorized access.
+
+**2. Choice of Strategy:**
+
+- `NextAuth` offers multiple session strategies:
+  - **JWT (default):** Utilizes JSON Web Tokens (JWTs) for session storage. JWTs are self-contained tokens containing user information and a signature, enabling stateless authentication on the server side.
+  - **Callback:** Employs user-specific callbacks to store and retrieve session data. This approach provides more flexibility but often requires additional server-side logic.
+  - **Database:** Leverages a database (like Prisma in your example) to manage session information directly. This option offers centralized control but might require more complex database interactions.
+
+**3. Configuration:**
+
+- The chosen session strategy is specified within the `NextAuth` configuration options in your `auth.ts` file. In your case, the line `session: { strategy: "jwt" }` sets the strategy to JWT.
+
+**4. Pros and Cons:**
+
+- Each strategy has its advantages and disadvantages:
+  - **JWT:** Simple to implement, scalable, and stateless, but vulnerable to token theft and requires server-side validation.
+  - **Callback:** More flexibility for customizing session data, but requires additional development effort.
+  - **Database:** Centralized control and potential scalability, but adds database complexity.
+
+**5. Choosing the Right Strategy:**
+
+- The optimal choice depends on your specific needs and requirements. Consider factors like:
+  - Application complexity and scalability needs
+  - Security concerns and desired level of control
+  - Development resources and expertise
+
+By understanding session strategies in `NextAuth` v5, you can make informed decisions about how to manage user authentication effectively in your application.
+
+## Callbacks
+
+They are asynchronous functions that can be used to control what happens when specific functions are called. Callbacks are extremely powerful, especially in scenarios involving JSON Web Tokens as they allow you to implement access controls without a database and to integrate with external databases or APIs.
+
+**What do I mean they are powerful?**
+
+Suppose I have multiple user where we have like normal `user`, and then we probably have a `admin`. We can use the `signIn` callback function to deny the user to have the admin privileges
+
+```TS
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      return true
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl
+    },
+    async session({ session, user, token }) {
+      return session
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      return token
+    }
+  }
+```
+
+The `session` and `jwt` are very important. The session is what returns our session in the `auth()` like we have done in this page. The session returned has a very limited amount of data, so we need to extend both the `session` and `jwt`. `jwt` returns the `token`. You will note that even though the `token` is returned, the `session` does not have all the user field. We can modify the `token` to add some custom fields, where we can have the all the session data
+
+```TS
+const SettingsPage = async () => {
+  const session = await auth();
+
+  /**
+   * @function signOut is exclusively for server components
+   */
+
+  return (
+    <div>
+      <form
+        action={async () => {
+          "use server";
+          await signOut();
+        }}
+      >
+        <Button className="">Sign Out</Button>
+      </form>
+
+      <div>{JSON.stringify(session)}</div>
+    </div>
+  );
+};
+```
+
+For this case, the session will have the following data. this token has some more fields, but the one we are interested in is the `sub` field which contains the `userid`. We need to use the `id` so that we can add more custom fields. It will be used to load our user from the database.
+
+```TS
+JWT:
+ {
+  name: 'Joseph Ngigi',
+  email: 'josephngigi775@gmail.com',
+  picture: null,
+  sub: 'clt1ccp2w0000102p5lx8wap1',
+  iat: 1708951544,
+  exp: 1711543544,
+  jti: '6f0fb481-6573-4dd1-9f47-d9dd8f42f6fa'
+}
+```
+
+We can the first create a custom field in the `jwt token`. You will note below what the log adds a field called custom. Note that this field can be given any name. This field only appears in the
+
+```TS
+async jwt({ token }) {
+  console.log(
+        "-------------------------Token------------------------------------"
+  );
+  token.custom = ""
+  console.log({"JWT: \n": token});
+  return token;
+},
+
+// -------------------------Token------------------------------------
+// {
+//   'JWT: \n': {
+//     name: 'Joseph Ngigi',
+//     email: 'josephngigi775@gmail.com',
+//     picture: null,
+//     sub: 'clt1ccp2w0000102p5lx8wap1',
+//     iat: 1708952508,
+//     exp: 1711544508,
+//     jti: '2e95ef0b-f629-4102-aebe-7eda3e62b53a',
+//     custom: ''
+//   }
+// }
+
+```
+
+In the `session` function, we can also add other new fields that are not in the `session` like shown. These fields will only appear in the `session`, and they are not in the `token` field. But if I reference a field from the `token`, it will then appear in the `session` field
+
+````TS
+    async session({ session, token }) {
+      console.log(
+        "-------------------------session------------------------------------"
+      );
+
+      if (session.user) {
+        session.user.newField = token.newField
+        session.user.otherField = `token`
+        session.user.newOtherField = token.newFiled
+        session.user.newOtherField = token.custom
+      }
+      console.log({"session: ": session});
+      console.log({"Session Token: ": token});
+
+      return session;
+    },
+
+```json
+--------------------------session------------------------------------
+{
+  'session: ': {
+    user: {
+      name: 'Joseph Ngigi',
+      email: 'josephngigi775@gmail.com',
+      image: null,
+      newField: undefined,
+      otherField: 'token',
+      newOtherField: 'This is a token field'
+    },
+    expires: '2024-03-27T13:26:39.289Z'
+  }
+}
+{
+  'Session Token: ': {
+    name: 'Joseph Ngigi',
+    email: 'josephngigi775@gmail.com',
+    picture: null,
+    sub: 'clt1ccp2w0000102p5lx8wap1',
+    iat: 1708953996,
+    exp: 1711545996,
+    jti: 'e3102bd4-68dd-4617-b63b-f89e8eb156f5',
+    custom: 'This is a token field'
+  }
+}```
+````
+
+With all the information we have so far, we can conclude that, since the `user.id` field is not initially in the `session`, we can get the `id` from the token, which is the `sub` field in the token and assign it to the `user session id`. In the callback, we can now use this way to find out how we can add a role field to our `jwt token`. This means we can now give admin privileges to the users who have logged in easily
+
+```TS
+async session({ session, token }) {
+  console.log(
+    "-------------------------session------------------------------------"
+  );
+
+  if (token.sub && session.user) {
+    session.user.id = token.sub
+  }
+
+  if (token.role && session.user) {
+    session.user.role = token.role as UserRole;
+  }
+
+  console.log({"session: ": session});
+  console.log({"Session Token: ": token});
+
+  return session;
+},
+
+async jwt({ token }) {
+  if (!token.sub) {
+    return token;
+  }
+
+  const existingUser = await getUserById(token.sub);
+
+  if (!existingUser) {
+    return token;
+  }
+
+  token.role = existingUser.role;
+  console.log({ token: token });
+
+  return token;
+},
+```
+
+## `SignIn` using providers
+
+In this project, we are going to use the **`GitHub`** and **`Google`** providers. We do this by first setting the client the providers by initializing the providers with the required `clientid` and `clientsecret`. For `github`, it is quite easy, just go to the settings, then visit the developers tab and the `Oauth` to generate an app.
+
+```TS
+Github({
+  clientId: process.env.GITHUB_CLIENT_ID,
+  clientSecret: process.env.GITHUB_CLIENT_SECRET,
+}),
+
+Google({
+  // env variables here
+}),
+
+credentials({
+  // code here
+})
+```
+
+1. On Google, we visit the `google cloud console`. Here we create a new project, and we can choose to visit the dashboard or just search the `APIs & Services`. On this page, we will first go to the `OAuth Consent Screen` ![Consent](./public/consentscreen.png) 
+
+2. We select the external user type to allow other people to sign in with their Google accounts. We will skip the App Logo and the authorize link. These will be added when we deploy. ![Consent](./public/editapp.png)
+
+3. Next we click save and continue for all the others. We then go to the `create credentials` tab, where we click `OAuth Client ID` ![Consent](./public/OauthScreenOne.png)
+
+4. The next screen is on adding the `Authorized JavaScript origins URL` and the `callback URL` ![Consent](./public/clienturlsauth.png)
