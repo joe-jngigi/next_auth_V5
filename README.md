@@ -1011,6 +1011,8 @@ Sometimes, when we add the same email we get a `signin` page that is from the `n
 
 ## Resend
 
+In this section, we will be creating a way we can do the verification of an email.
+
 We need a model that we can use to verify our credentials. We create a model in the prisma models.  `@@unique([email, token])` means having a unique token for each specific email
 
 ```prisma
@@ -1023,3 +1025,6 @@ model VerificationToken {
   @@unique([email, token])
 }
 ```
+We then start getting this data from the database, and we start by making queries to query the data from the database through `getVerificationTokenByToken` and `getVerificationTokenByEmail`.
+
+Next step will be to generate the tokens required for this
