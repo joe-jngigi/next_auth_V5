@@ -6,6 +6,7 @@ import { AuthError } from "next-auth";
 
 import { LoginSchema } from "@/src/schemas/index";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { getUserByEmail } from "../data/user_data";
 
 export const loginAction = async (values: zod.infer<typeof LoginSchema>) => {
   const validatedFieldValues = LoginSchema.safeParse(values);
@@ -15,6 +16,14 @@ export const loginAction = async (values: zod.infer<typeof LoginSchema>) => {
   }
 
   const { email, password } = validatedFieldValues.data;
+
+  const checUser = await getUserByEmail(email)
+  if (!checUser) {
+    return {error: "User does not exist....."}
+  }
+   if (!checUser.password) {
+    return {info: "signIn with Google or Github"}
+   }
 
   try {
     await signIn("credentials", {
