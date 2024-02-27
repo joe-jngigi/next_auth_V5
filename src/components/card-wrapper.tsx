@@ -18,12 +18,14 @@ const CardWrapper: React.FC<TLAYOUT_CARDWRAPPER_EXTENDS> = ({
   backButtonHref,
   backButtonLabel,
   headerLabel,
+  headerTitle,
   showSocial,
+
 }) => {
   return (
     <Card className="w-[500px]">
       <CardHeader>
-        <AuthHeader label={headerLabel} />
+        <AuthHeader label={headerLabel} title={headerTitle} />
       </CardHeader>
 
       <CardContent>{children}</CardContent>
@@ -35,7 +37,7 @@ const CardWrapper: React.FC<TLAYOUT_CARDWRAPPER_EXTENDS> = ({
       )}
 
       <CardFooter>
-        <LinkButton label = {backButtonLabel} href = {backButtonHref} />
+        <LinkButton label={backButtonLabel} href={backButtonHref} />
       </CardFooter>
     </Card>
   );

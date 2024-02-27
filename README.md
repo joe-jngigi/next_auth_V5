@@ -956,10 +956,70 @@ credentials({
 })
 ```
 
-1. On Google, we visit the `google cloud console`. Here we create a new project, and we can choose to visit the dashboard or just search the `APIs & Services`. On this page, we will first go to the `OAuth Consent Screen` ![Consent](./public/consentscreen.png) 
+1. On Google, we visit the `google cloud console`. Here we create a new project, and we can choose to visit the dashboard or just search the `APIs & Services`. On this page, we will first go to the `OAuth Consent Screen` ![Consent](./public/consentscreen.png)
 
 2. We select the external user type to allow other people to sign in with their Google accounts. We will skip the App Logo and the authorize link. These will be added when we deploy. ![Consent](./public/editapp.png)
 
 3. Next we click save and continue for all the others. We then go to the `create credentials` tab, where we click `OAuth Client ID` ![Consent](./public/OauthScreenOne.png)
 
 4. The next screen is on adding the `Authorized JavaScript origins URL` and the `callback URL` ![Consent](./public/clienturlsauth.png)
+
+Matter of fact when working with providers like google and GitHub, I realized that it does not redirect once I log in and this is simply because I have the of code on the edge runtime enabled in the `next-auth` route `api`. It gave me an error that it was unable to generate the said page.
+
+At this stage of the project, you will note that once we use the providers to sign, we have, we get a `reference/link` to the `account table` which fills in some details. But when we do the normal signup, we have no `link` to the `accounts table` ![Consent](./public/accounts.png)
+
+---
+
+> > In JavaScript (JS) and TypeScript (TS), asynchronous functions are a way to handle operations that take an unknown amount of time to complete, without blocking the main thread of execution. This allows your application to remain responsive while waiting for the asynchronous operation to finish.
+
+## Events
+
+Events are asynchronous functions that do not return a response, they are useful for audit logs / reporting or handling any other side effects. For instance, when we have a user sign in, we can add an event object, to check whether it is a new user signing in.
+
+### `linkAccount`
+
+`NextAuth` provides various event handlers to allow customization of specific parts of the authentication flow. The `linkAccount` event is triggered when a user links a new account to their existing one. Before we add the code to our auth file, we first signed up with the GitHub provider, and we can see that on this sign up, the email show is not verified. Now we need to fix this, where we use the link account.
+![email not verified](./public/emailnotverified.png)
+
+**What does the `linkAccount` do?**
+
+It is an event Sent when an account in a given provider is linked to a user in our user database. For example, when a user signs up with Twitter or when an existing user links their Google account.
+
+In our case, we have used the event to update that the email has been verified, by adding a date to it
+![alt text](./public/emailverified.png)
+
+```TS
+events: {
+  async linkAccount({ user }) {
+    await data_base.user.update({
+      where: { id: user.id },
+      data: {emailVerified: new Date()}
+    })
+  },
+},
+
+```
+
+Sometimes, when we add the same email we get a `signin` page that is from the `next-auth`. A `signin` page that is from the next-auth is in build, and we need to add our own pages. This will help us manage our errors as expected
+
+```TS
+  pages: {
+    signIn: "/auth/login",
+    error: "/auth/error",
+  },
+```
+
+## Resend
+
+We need a model that we can use to verify our credentials. We create a model in the prisma models.  `@@unique([email, token])` means having a unique token for each specific email
+
+```prisma
+model VerificationToken {
+  id            String        @id @default(cuid())
+  email         String
+  token         String        @unique
+  expires       DateTime
+
+  @@unique([email, token])
+}
+```

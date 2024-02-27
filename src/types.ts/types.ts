@@ -14,10 +14,12 @@ export type TLAYOUT_CARDWRAPPER_EXTENDS = T_LAYOUTPROPS & {
   headerLabel: string;
   backButtonLabel: string;
   backButtonHref: string;
+  headerTitle: string;
   showSocial?: boolean;
 };
 
 export type T_LINKTEXTPROPS = {
+  title?: string,
   label?: string;
   href?: string;
 };

@@ -13,9 +13,13 @@ import { LoginSchema } from "@/src/schemas/index";
 import { Button, CardWrapper, Input } from "@/src";
 import { loginAction } from "@/src/server-actions/login";
 import { T_VALIDATE_DATA_TYPES } from "@/src/types.ts/types";
+import { useSearchParams } from "next/navigation";
 
 export const LoginForm = () => {
   const [isPending, setTransition] = useTransition();
+
+  const searchParams = useSearchParams();
+  const urlError = searchParams.get("error");
 
   // const form
   const form = useForm<zod.infer<typeof LoginSchema>>({
@@ -42,7 +46,11 @@ export const LoginForm = () => {
           toast.info(data.info, { theme: "colored" });
           return;
         }
-        console.log(data);
+        if (urlError === "OAuthAccountNotLinked") {
+          toast.error("Email Already in use with another provider", {
+            theme: "colored",
+          });
+        }
         toast.success("Logged in successfully", { theme: "colored" });
         // toast.error(data.error, { theme: "colored" });
       });
@@ -52,6 +60,7 @@ export const LoginForm = () => {
 
   return (
     <CardWrapper
+      headerTitle="next Auth | Login"
       headerLabel="Welcome, Let's Authenticate you"
       backButtonHref="/auth/register"
       backButtonLabel="Don't have an account?"

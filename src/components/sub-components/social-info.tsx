@@ -5,10 +5,24 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
+import { useSearchParams } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 export const SocialInfo = () => {
+    const searchParams = useSearchParams();
+    const urlError = searchParams.get("error");
 
   const handleClick = (provider: "google" | "github") => {
+
+    if (urlError === "OAuthAccountNotLinked") {
+      toast.error("Email Already in use with another provider", {
+        theme: "colored",
+      });
+
+      return
+    }
+    console.log(provider);
+    
     signIn(provider, {
       callbackUrl: DEFAULT_LOGIN_REDIRECT,
       // redirect: DEFAULT_LOGIN_REDIRECT,

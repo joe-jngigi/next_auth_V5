@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-poppins !scroll-smooth">
-        <ToastContainer draggable position="bottom-right" />
+        <ToastContainer draggable position="bottom-right" className= "text-xs font-display"/>
 
         {children}
       </body>

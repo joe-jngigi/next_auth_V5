@@ -22,7 +22,7 @@ export const loginAction = async (values: zod.infer<typeof LoginSchema>) => {
     return {error: "User does not exist....."}
   }
    if (!checUser.password) {
-    return {info: "signIn with Google or Github"}
+    return {info: "This email already Exists. Check in with Google or GitHub"}
    }
 
   try {
