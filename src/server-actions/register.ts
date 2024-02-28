@@ -6,6 +6,7 @@ import { hash } from "bcryptjs";
 import { RegisterSchema } from "@/src/schemas/index";
 import { data_base } from "@/src/lib/prisma-db";
 import { getUserByEmail } from "@/src/data/user_data";
+import { generateVerificationToken } from "@/src/lib/tokens";
 
 export const registerAction = async (
   values: zod.infer<typeof RegisterSchema>
@@ -33,7 +34,9 @@ export const registerAction = async (
     },
   });
 
+  const verificationToken = await generateVerificationToken(email);
+
   // TODO send a verification email later
 
-  return { success: "Registered Successfully, Confirm Email " };
+  return { success: "Confirmation email sent!" };
 };

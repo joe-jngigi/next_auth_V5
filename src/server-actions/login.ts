@@ -7,6 +7,7 @@ import { AuthError } from "next-auth";
 import { LoginSchema } from "@/src/schemas/index";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { getUserByEmail } from "../data/user_data";
+import { generateVerificationToken } from "@/src/lib/tokens";
 
 export const loginAction = async (values: zod.infer<typeof LoginSchema>) => {
   const validatedFieldValues = LoginSchema.safeParse(values);
@@ -17,13 +18,21 @@ export const loginAction = async (values: zod.infer<typeof LoginSchema>) => {
 
   const { email, password } = validatedFieldValues.data;
 
-  const checUser = await getUserByEmail(email)
-  if (!checUser) {
-    return {error: "User does not exist....."}
+  const checUser = await getUserByEmail(email);
+
+  if (!checUser || !checUser.email) {
+    return { error: "User does not exist." };
   }
-   if (!checUser.password) {
-    return {info: "This email already Exists. Check in with Google or GitHub"}
-   }
+  if (!checUser.password) {
+    return {
+      info: "This email already Exists. Check in with Google or GitHub",
+    };
+  }
+
+
+  if (!checUser.emailVerified) {
+    const verification_token = await generateVerificationToken(checUser.email)
+  }
 
   try {
     await signIn("credentials", {

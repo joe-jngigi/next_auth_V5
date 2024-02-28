@@ -1009,11 +1009,13 @@ Sometimes, when we add the same email we get a `signin` page that is from the `n
   },
 ```
 
-## Resend
+# Email Verification
+
+**Token Generation**
 
 In this section, we will be creating a way we can do the verification of an email.
 
-We need a model that we can use to verify our credentials. We create a model in the prisma models.  `@@unique([email, token])` means having a unique token for each specific email
+We need a model that we can use to verify our credentials. We create a model in the prisma models. `@@unique([email, token])` means having a unique token for each specific email
 
 ```prisma
 model VerificationToken {
@@ -1025,6 +1027,99 @@ model VerificationToken {
   @@unique([email, token])
 }
 ```
+
 We then start getting this data from the database, and we start by making queries to query the data from the database through `getVerificationTokenByToken` and `getVerificationTokenByEmail`.
 
-Next step will be to generate the tokens required for this
+Next step will be to generate the tokens required for this. In this we are making a function that will generate the token, and for this case we are using the `uuid` library which is an easy way to generate a unique token. We then add `expiry time` by getting the current time and adding 1 hour to it. We then attach the `email` to the three. Once we have done this, we can now check whether there is a `verificationToken` entity in the database bearing that email, whereby if it exists we will first delete it. After this, we can now create the `verificationToken` entity in the database.
+
+```TS
+import { v4 as uuidv4 } from "uuid";
+import { getVerificationTokenByEmail } from "../data/verification_token";
+import { data_base } from "@/src/lib/prisma-db";
+
+export const generateVerificationToken = async (email: string) => {
+  /**
+   * How this works is that it is generating a string of unique id
+   *  @function uuid()
+   * @type {string}
+   */
+  const token: string = uuidv4();
+
+  const currentDate = new Date();
+  /**
+   * Get the current date and time and Add 1 hour to the current time
+   * @const  const expiryTime = currentDate.setHours(currentDate.getHours() + 1);
+   */
+
+  const expiryTime = new Date(new Date().getTime() + 3600 * 1000);
+
+  console.log({expiryTime: expiryTime});
+
+  /**
+   * We then check an existingToken already sent for that email in the database.
+   * If that emailToken exist, we will delete the whole entity in the database
+   *
+   * It deletes where the id is the same as the {existingToken.id} returned from the
+   * @function getVerificationTokenByEmail()
+   */
+  const existingToken = await getVerificationTokenByEmail(email);
+
+  if (existingToken) {
+    await data_base.verificationToken.delete({
+      where: { id: existingToken.id },
+    });
+  }
+
+  const createVerificationToken = await data_base.verificationToken.create({
+    data: {
+      email,
+      token,
+      expires: expiryTime,
+    },
+  });
+
+  return createVerificationToken
+};
+```
+
+We need to call this function, and one place we will call it is when we are creating an account for the user, so we call it in the register user `API/serverAction`
+
+**How does time work in TypeScript?**
+
+Time is typically handled using the `Date` object and various methods available in the `Date API`. The `Date` object represents a specific moment in time. You can create a new Date object to represent the current date and time or a specific date and time.
+
+```TS
+const currentDate = new Date(); // Represents the current date and time
+const specificDate = new Date('2024-02-28T12:00:00'); // Represents a specific date and time
+```
+
+You can access various components of a Date object such as year, month, day, hour, minute, second, and millisecond using specific methods. After getting this, You can manipulate dates by adding or subtracting milliseconds, days, months, etc. JS/TS doesn't have built-in functions for formatting dates, but you can achieve this using libraries like `date-fns`, `moment.js`, or formatting manually.
+
+```TS
+const year = currentDate.getFullYear();
+const month = currentDate.getMonth(); // Note: Months are zero-based (0-11)
+const day = currentDate.getDate();
+const hour = currentDate.getHours();
+const minute = currentDate.getMinutes();
+const second = currentDate.getSeconds();
+const millisecond = currentDate.getMilliseconds();
+
+const tomorrow = new Date();
+tomorrow.setDate(currentDate.getDate() + 1); // Represents tomorrow's date
+
+```
+
+`new Date().getTime()` is a common way to get the current timestamp in JavaScript. This method returns the number of milliseconds elapsed since `January 1, 1970, UTC (Coordinated Universal Time)`, also known as the Unix epoch. It's a standard way to represent time in many programming environments. To format or convert the time returned by `new Date().getTime()`, you can use various methods depending on your requirements.
+
+```TS
+const timeStamp = new Date().getTime();
+const date = new Date(timeStamp);
+console.log(date.toLocaleString()); // Convert to local date and time string
+
+const timeStamp = new Date().getTime();
+console.log(new Date(timeStamp).toLocaleString('en-US')); // Format as US date and time string
+
+const timeStamp = new Date().getTime();
+const formattedDate = dateFns.format(new Date(timeStamp), 'yyyy-MM-dd HH:mm:ss');
+console.log(formattedDate); // Output: '2024-02-28 15:30:00' (example format)
+```
