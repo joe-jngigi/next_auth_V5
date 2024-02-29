@@ -29,9 +29,9 @@ export const loginAction = async (values: zod.infer<typeof LoginSchema>) => {
     };
   }
 
-
   if (!checUser.emailVerified) {
-    const verification_token = await generateVerificationToken(checUser.email)
+    await generateVerificationToken(checUser.email);
+    return { success: "This E-mail needs verification! Check your Email for Confirmation." };
   }
 
   try {
@@ -41,7 +41,7 @@ export const loginAction = async (values: zod.infer<typeof LoginSchema>) => {
       email,
       password,
     });
-    return { success: "Email Sent" };
+    return { success: "Login successful" };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

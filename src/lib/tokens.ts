@@ -24,8 +24,10 @@ export const generateVerificationToken = async (email: string ) => {
 
   /**
    * We then check an existingToken already sent for that email in the database.
-   * If that emailToken exist, we will delete the whole entity in the database
-   *
+   * If that emailToken exist, we will delete the whole entity in the database.
+   * 
+   * This will allow us not to have the user multiple verification codes. 
+   * As when they create a new one, 
    * It deletes where the id is the same as the {existingToken.id} returned from the
    * @function getVerificationTokenByEmail()
    */

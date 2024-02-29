@@ -6,7 +6,8 @@ export { Input } from "@/src/components/ui/input";
 export { Label } from "@/src/components/ui/label";
 
 // Custom Auth Components
-export { default as LoginButton } from "@/src/components/auth/login-btn";
+export { EmailTemplate } from "@/src/components/emails";
+
 export { LoginForm } from "@/src/components/auth/login-form";
 export { RegisterForm } from "@/src/components/auth/register-form";
 

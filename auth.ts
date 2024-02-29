@@ -10,7 +10,15 @@ import { UserRole } from "@prisma/client";
 
 /**
  * Normally, this is is usually created like this
- * @export const { handlers: { GET, POST }, auth,} = NextAuth({ providers: [GitHub], });
+ * @export { { handlers: { GET, POST }, auth,} = NextAuth({ providers: [GitHub], });}
+ *
+ * But because I am using an adapter, ie. the prisma adapter,
+ * I have to create a separate auth configuration file which I can import in the middleware
+ *
+ * I have documented more about why this is so on the readme file.
+ * You can refer to the nextAuth v5 documentation
+ *
+ * - [Adapters and Edge compatibility](https://authjs.dev/guides/upgrade-to-v5?authentication-method=server-component#edge-compatibility)
  */
 export const {
   handlers: { GET, POST },
@@ -26,22 +34,34 @@ export const {
     async linkAccount({ user }) {
       await data_base.user.update({
         where: { id: user.id },
-        data: {emailVerified: new Date()} 
-      })
+        data: { emailVerified: new Date() },
+      });
     },
   },
   callbacks: {
-    // async signIn({ user  }) {
+    async signIn({ user, account }) {
+      if (account?.provider !== "credentials") {
+        return true;
+      }
 
-    //   const existingUser = await getUserById(user.id)
-    //   console.log({ existingUser });
+      /**
+       * This checjs for an existingUser, before checking if the user is emailVerified
+       * If the user is not verified, they are denied access through the middleware
+       * This provides an extra layer security, as we have already do the same on the frontend part
+       */
+      const existingUser = await getUserById(user.id);
+      if (!existingUser || !existingUser.emailVerified) {
+        return false;
+      }
 
-    //   if (!existingUser || !existingUser.emailVerified) {
-    //     return false
-    //   }
-    //   return true;
-    // },
+      // TODO Add 2FA checking
+      return true;
+      
+    },
 
+    /**
+     * This just returns the
+     */
     async session({ session, token }) {
       if (token.sub && session.user) {
         session.user.id = token.sub;

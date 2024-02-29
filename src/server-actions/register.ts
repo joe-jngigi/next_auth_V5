@@ -38,5 +38,5 @@ export const registerAction = async (
 
   // TODO send a verification email later
 
-  return { success: "Confirmation email sent!" };
+  return { success: "SUccess! Confirmation Email sent." };
 };

@@ -43,6 +43,10 @@ export const LoginForm = () => {
             toast.error(data.error, { theme: "colored" });
             return;
           }
+          if (data.success) {
+            toast.success(data.success, { theme: "colored" });
+            return
+          }
           toast.info(data.info, { theme: "colored" });
           return;
         }
@@ -51,7 +55,7 @@ export const LoginForm = () => {
             theme: "colored",
           });
         }
-        toast.success("Logged in successfully", { theme: "colored" });
+        
         // toast.error(data.error, { theme: "colored" });
       });
       //

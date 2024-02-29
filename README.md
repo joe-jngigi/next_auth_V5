@@ -1082,7 +1082,18 @@ export const generateVerificationToken = async (email: string) => {
 };
 ```
 
-We need to call this function, and one place we will call it is when we are creating an account for the user, so we call it in the register user `API/serverAction`
+We need to call this function, and one place we will call it is when we are creating an account for the user, so we call it in the `register user API/serverAction`
+
+We also need to check whether the user is verified when they try to `login`. This we add in our `login serverAction/API route`
+
+```TS
+  if (!checUser.emailVerified) {
+    await generateVerificationToken(checUser.email);
+    return { success: "This E-mail needs verification! Check your Email for Confirmation." };
+  }
+```
+
+In the other case, we might have
 
 **How does time work in TypeScript?**
 
@@ -1123,3 +1134,28 @@ const timeStamp = new Date().getTime();
 const formattedDate = dateFns.format(new Date(timeStamp), 'yyyy-MM-dd HH:mm:ss');
 console.log(formattedDate); // Output: '2024-02-28 15:30:00' (example format)
 ```
+
+**`SignIn` Callback**
+
+We may need to have the user receive a confirmation email. way, we can allow users to confirm their registration when they sign up. We can add this to the frontend `login` to check whether the user has been verified from the database, or at another angle we also add this to the `auth` file in the callbacks to add a security layer to make confirmation that the user has been verified
+
+```TS
+async signIn({ user, account }) {
+  if (account?.provider !== "credentials") {
+    return true;
+  }
+
+  const existingUser = await getUserById(user.id);
+  if (!existingUser || !existingUser.emailVerified) {
+    return false;
+  }
+
+  // TODO Add 2FA checking
+  return true;
+},
+
+```
+
+## Email Verification
+
+We need to send the email where we will use [Resend](https://resend.com/docs/send-with-nextjs) tool, that can allow one to send emails to you. For now, I can only send the verification email to myself since I don't have a domain
