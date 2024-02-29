@@ -7,6 +7,7 @@ import { RegisterSchema } from "@/src/schemas/index";
 import { data_base } from "@/src/lib/prisma-db";
 import { getUserByEmail } from "@/src/data/user_data";
 import { generateVerificationToken } from "@/src/lib/tokens";
+import { sendVerificationEmail } from "@/src/lib/mail";
 
 export const registerAction = async (
   values: zod.infer<typeof RegisterSchema>
@@ -36,7 +37,7 @@ export const registerAction = async (
 
   const verificationToken = await generateVerificationToken(email);
 
-  // TODO send a verification email later
+  await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
   return { success: "SUccess! Confirmation Email sent." };
 };

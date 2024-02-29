@@ -20,7 +20,7 @@ export const generateVerificationToken = async (email: string ) => {
    * @const  const expiryTime = currentDate.setHours(currentDate.getHours() + 1);
    */
   const expiryTime = new Date(new Date().getTime() + 3600 * 1000);
-  console.log({ expiryTime: expiryTime });
+  // console.log({ expiryTime: expiryTime });
 
   /**
    * We then check an existingToken already sent for that email in the database.

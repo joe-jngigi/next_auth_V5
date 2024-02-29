@@ -1158,4 +1158,4 @@ async signIn({ user, account }) {
 
 ## Email Verification
 
-We need to send the email where we will use [Resend](https://resend.com/docs/send-with-nextjs) tool, that can allow one to send emails to you. For now, I can only send the verification email to myself since I don't have a domain
+We need to send the email where we will use [Resend](https://resend.com/docs/send-with-nextjs) tool, that can allow one to send emails to you. For now, I can only send the verification email to myself since I don't have a domain. This doesn't require much of a technical explanation for now
