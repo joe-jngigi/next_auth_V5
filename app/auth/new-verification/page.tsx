@@ -3,7 +3,7 @@ import React from "react";
 
 const NewVerificationPage = () => {
   return (
-    <div className="bg-slate-500 w-full h-full">
+    <div className=" w-full h-full flex-c-center">
       <VerificationForm />
     </div>
   );

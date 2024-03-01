@@ -1158,4 +1158,94 @@ async signIn({ user, account }) {
 
 ## Email Verification
 
-We need to send the email where we will use [Resend](https://resend.com/docs/send-with-nextjs) tool, that can allow one to send emails to you. For now, I can only send the verification email to myself since I don't have a domain. This doesn't require much of a technical explanation for now
+We need to send the email where we will use [Resend](https://resend.com/docs/send-with-nextjs) tool, that can allow one to send emails to you. For now, I can only send the verification email to myself since I don't have a domain. This doesn't require much of a technical explanation for now.
+
+In the email verification, we send an email, we need to send a verification link, where it is embedded in the email, whereby in this link it is like show below. The link is a will take the user to a generated verification page, with the `uniqueid` of their token
+
+`http://localhost:3000/auth/new-verification?token=${token}`
+
+**React `useCallback` hook**
+
+It is a hook used for memorizing functions, to prevent unnecessary re-rendering of the function; of child components
+
+Clicking the button in the `ParentComponent` will cause it to re-render. This is because the count state is updated in the `handleButtonClick` function, which triggers a `re-render` of the component.
+
+Each time the `ParentComponent` re-renders, it also re-renders its child component, `ChildComponent`, since it's a part of its JSX tree. This is the default behavior in React: when a parent component re-renders, all of its children also re-render.
+
+If you want to prevent unnecessary re-renders of the `ChildComponent` when the `ParentComponent` state changes, you can use `React.memo` or `useMemo` to `memoize` the `ChildComponent` and prevent it from `re-rendering` unless its props change significantly.
+
+```TSX
+import React, { useState, useEffect, useCallback } from "react";
+
+// Define Todo type
+type Todo = {
+  id: number;
+  text: string;
+};
+
+// Define Props for ChildComponent
+type ChildComponentProps = {
+  getTodos: () => Todo;
+};
+
+// Define ParentComponent
+const ParentComponent: React.FC = () => {
+  const todos: Todo[] = [
+    { id: 1, text: "Todo 1" },
+    { id: 2, text: "Todo 2" },
+    { id: 3, text: "Todo 3" },
+    { id: 4, text: "Todo 4" },
+    { id: 5, text: "Todo 5" },
+    { id: 6, text: "Todo 6" },
+  ];
+
+  const [count, setCount] = useState(0);
+
+  // Memoize the getTodos function using useCallback
+  const getTodos = useCallback(() => {
+    return todos[count];
+  }, [count, todos]); // Ensure the function updates when count or todos change
+
+  const handleButtonClick = () => {
+    setCount((prevCount) => (prevCount + 1) % todos.length);
+  };
+
+  return (
+    <div>
+      <h1>Parent Component</h1>
+      <button onClick={handleButtonClick}>Next Todo</button>
+      {/* Pass getTodos function, not its result */}
+      <ChildComponent getTodos={getTodos} />
+    </div>
+  );
+};
+
+// Define ChildComponent
+const ChildComponent: React.FC<ChildComponentProps> = ({ getTodos }) => {
+  const [currentTodos, setCurrentTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    // Call getTodos function to get the current todos
+    setCurrentTodos([...currentTodos, getTodos()]);
+  }, [getTodos]);
+
+  return (
+    <div>
+      <h2>Child Component</h2>
+      <div>
+        {currentTodos.map((todo) => (
+          <div key={todo.id}>{todo.text}</div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Memoize ChildComponent to prevent unnecessary re-renders
+const MemoizedChildComponent = React.memo(ChildComponent);
+
+export default ParentComponent;
+
+```
+
+`getTodos` function is wrapped with `useCallback` hook, ensuring that it's `memoized` and only changes when its dependencies (`count` and `todos`) change.
