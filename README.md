@@ -1256,10 +1256,41 @@ The `useEffect` hook is used to trigger a side effect after the component render
 
 When we say "`verifyUserToken` changing," it means that the value stored in the `verifyUserToken` variable is different from its previous value. In the context of this React component, `verifyUserToken` is initialized with the value retrieved from the URL parameters using the `useSearchParams` hook.
 
-For example, if the initial value of `verifyUserToken` is ***"ajbgvtriutbitu132243,"*** and then it changes to another value, such as ***"newToken123,"*** then `verifyUserToken` has indeed changed.
+For example, if the initial value of `verifyUserToken` is **_"ajbgvtriutbitu132243,"_** and then it changes to another value, such as **_"newToken123,"_** then `verifyUserToken` has indeed changed.
 
 The `useCallback` hook in this component depends on the `verifyUserToken` variable. If `verifyUserToken` changes, React will recompute the `onSubmit` function, ensuring that it has access to the updated value of `verifyUserToken`.
 
-This behavior is crucial for ensuring that the function operates with the most up-to-date data. So the only time that the function is re-rendered is when the value changes, maintaining the *"working with the up-to-date data"*
+This behavior is crucial for ensuring that the function operates with the most up-to-date data. So the only time that the function is re-rendered is when the value changes, maintaining the _"working with the up-to-date data"_
 
-On this function, we will create a server action
+On this function, we will create a server action, that will be used in the verification of the user by updating the `verified email` in the user, and then delete the email.
+
+**How the expiry time works?**
+
+1. **Getting the Expiry Date from the Database**:
+
+   - The database stores the expiry date and time of the token as a specific point in the future. Let's call this "Expiry Date from Database".
+
+2. **Creating the Current Date and Time**:
+
+   - We use `new Date()` to create a representation of the current date and time. This means, at the moment the code runs, we get the current date and time from the system clock. Let's call this "Current Date and Time".
+
+3. **Comparing Expiry Date with Current Date and Time**:
+
+   - To check if the token has expired, we compare the "Expiry Date from Database" with the "Current Date and Time".
+   - If the "Expiry Date from Database" is earlier than the "Current Date and Time", it means the token has expired.
+   - If the "Expiry Date from Database" is later than the "Current Date and Time", it means the token is still valid.
+
+4. **Logic Simplified**:
+   - Imagine the "Expiry Date from Database" as a point in the future when the token is set to expire.
+   - Imagine the "Current Date and Time" as "right now", the exact moment when the code is running.
+   - If the "Expiry Date from Database" is before "right now", it's like saying the expiration time has already passed, so the token has expired.
+
+In simpler terms, the code checks if the expiry time stored in the database is earlier than the current time. If it is, then the token is considered expired. If not, the token is still valid. This comparison helps determine if the token has expired or not.
+
+## The Architecture of the Registration and the Verification using a token
+
+When we register a user using credentials, we will generate a **Verification Token**. We then trigger an email, and send using **resend**. This will send a link generated with a `unique token`, to a **verification page**
+
+> We need to check if the user is verified, if not, this will generate a new token and send an email. We do this in the frontend and the `auth configuration file` in the `signIn` callback.
+
+In the verification page, we then trigger the `verificationOfToken` function, where it checks if the token is expired, the user exists, which in return it will update the user's `emailVerified` field, and then delete the token.
