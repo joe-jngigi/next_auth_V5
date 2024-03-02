@@ -1249,3 +1249,17 @@ export default ParentComponent;
 ```
 
 `getTodos` function is wrapped with `useCallback` hook, ensuring that it's `memoized` and only changes when its dependencies (`count` and `todos`) change.
+
+On this application, during the verification of the user, we need to a function `onSubmit`, which will be wrapped in a `useCallback` hook. By using `useCallback` with the `verifyUserToken` variable in its dependency array, the `onSubmit` function will only be recreated if the `verifyUserToken` value changes. This helps optimize performance by avoiding unnecessary function recreations on each render.
+
+The `useEffect` hook is used to trigger a side effect after the component renders. In this case, the `useEffect` hook is configured to call the `onSubmit` function whenever the `onSubmit` function itself changes. Since the `onSubmit` function is `memoized` with `useCallback`, it's guaranteed to be referentially stable as long as its dependencies don't change. Therefore, the `onSubmit` function itself changing implies that its dependencies have changed, and the effect is triggered to execute the updated `onSubmit` function.
+
+When we say "`verifyUserToken` changing," it means that the value stored in the `verifyUserToken` variable is different from its previous value. In the context of this React component, `verifyUserToken` is initialized with the value retrieved from the URL parameters using the `useSearchParams` hook.
+
+For example, if the initial value of `verifyUserToken` is ***"ajbgvtriutbitu132243,"*** and then it changes to another value, such as ***"newToken123,"*** then `verifyUserToken` has indeed changed.
+
+The `useCallback` hook in this component depends on the `verifyUserToken` variable. If `verifyUserToken` changes, React will recompute the `onSubmit` function, ensuring that it has access to the updated value of `verifyUserToken`.
+
+This behavior is crucial for ensuring that the function operates with the most up-to-date data. So the only time that the function is re-rendered is when the value changes, maintaining the *"working with the up-to-date data"*
+
+On this function, we will create a server action
