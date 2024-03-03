@@ -19,9 +19,9 @@ export const VerificationForm = () => {
    * This function will check whether the user token has expired
    * This will prevent this function to be re-rendered
    */
-  const onSubmit =  useCallback(() => {
+  const onSubmit = useCallback(() => {
     if (success && error) {
-      return
+      return;
     }
     if (!verifyUserToken) {
       toast.error("The token is missing!", { theme: "colored" });
@@ -42,7 +42,7 @@ export const VerificationForm = () => {
       .catch(() => {
         toast.error("Something Went wrong!", { theme: "colored" });
       });
-  }, [verifyUserToken]);
+  }, [verifyUserToken, error, success]);
 
   useEffect(() => {
     onSubmit();

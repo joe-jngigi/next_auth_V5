@@ -1,11 +1,15 @@
-import * as zod from "zod"
+import * as zod from "zod";
 
 export const LoginSchema = zod.object({
-    email: zod.string().email(),
-    password: zod.string().min(2, {
-        message: "Input a nice Password that I cannot guess"
-    })
-})
+  email: zod.string().email(),
+  password: zod.string().min(2, {
+    message: "Input a nice Password that I cannot guess",
+  }),
+});
+
+export const ResetPasswordSchema = zod.object({
+  email: zod.string().email(),
+});
 
 export const RegisterSchema = zod.object({
   email: zod.string().email({

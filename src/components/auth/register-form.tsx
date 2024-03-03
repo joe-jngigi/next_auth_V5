@@ -68,7 +68,7 @@ export const RegisterForm = () => {
                       {...field}
                       placeholder="Joseph Ngigi"
                       type="text"
-                      className="drop-shadow-md"
+                      className="drop-shadow-md rounded-full"
                     />
                   </ShadcnForm.FormControl>
                   <ShadcnForm.FormMessage />
@@ -88,7 +88,7 @@ export const RegisterForm = () => {
                       {...field}
                       placeholder="josephngigi775@gmail.com"
                       type="email"
-                      className="drop-shadow-md"
+                      className="drop-shadow-md rounded-full"
                     />
                   </ShadcnForm.FormControl>
                   <ShadcnForm.FormMessage />
@@ -109,7 +109,7 @@ export const RegisterForm = () => {
                       {...field}
                       placeholder="Password"
                       type="password"
-                      className="drop-shadow-md"
+                      className="drop-shadow-md rounded-full"
                     />
                   </ShadcnForm.FormControl>
                   <ShadcnForm.FormMessage />

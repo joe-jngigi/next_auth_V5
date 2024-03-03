@@ -6,7 +6,6 @@ import {
   AuthHeader,
   SocialInfo,
   LinkButton,
-
   Card,
   CardContent,
   CardFooter,
@@ -20,7 +19,8 @@ const CardWrapper: React.FC<TLAYOUT_CARDWRAPPER_EXTENDS> = ({
   headerLabel,
   headerTitle,
   showSocial,
-
+  showForgotPassword,
+  forgotPasswordHref,
 }) => {
   return (
     <Card className="w-[500px]">
@@ -38,6 +38,9 @@ const CardWrapper: React.FC<TLAYOUT_CARDWRAPPER_EXTENDS> = ({
 
       <CardFooter>
         <LinkButton label={backButtonLabel} href={backButtonHref} />
+        {showForgotPassword && (
+          <LinkButton label="Forgot Password?" href={forgotPasswordHref} />
+        )}
       </CardFooter>
     </Card>
   );

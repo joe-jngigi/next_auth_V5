@@ -1,14 +1,14 @@
 /**
- * @joe-jngigi: Add @types {export types}  
-*/
+ * @joe-jngigi: Add @types {export types}
+ */
 
 // Layout Props
 export type T_LAYOUTPROPS = {
-    children: React.ReactNode;
-    mode?: "modal" | "redirect";
-    asChild?: boolean;
-    className?: string;
-}
+  children: React.ReactNode;
+  mode?: "modal" | "redirect";
+  asChild?: boolean;
+  className?: string;
+};
 
 export type TLAYOUT_CARDWRAPPER_EXTENDS = T_LAYOUTPROPS & {
   headerLabel: string;
@@ -16,10 +16,12 @@ export type TLAYOUT_CARDWRAPPER_EXTENDS = T_LAYOUTPROPS & {
   backButtonHref: string;
   headerTitle: string;
   showSocial?: boolean;
+  showForgotPassword?: boolean;
+  forgotPasswordHref?: string;
 };
 
 export type T_LINKTEXTPROPS = {
-  title?: string,
+  title?: string;
   label?: string;
   href?: string;
 };

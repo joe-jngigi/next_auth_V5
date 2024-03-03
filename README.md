@@ -467,6 +467,62 @@ Middleware refers to a function that runs before handling a request. It is commo
 
 In the context of Next.js, middleware is often used with API routes. Middleware functions can be added to API routes using the middleware property in the handler function. These middleware functions execute sequentially, allowing you to modify the request or response as needed before the API route's main logic executes.
 
+ **Here's a breakdown of the code's role in protecting routes in `NextAuth` v5:**
+
+**Importing the `auth` middleware:**
+
+`import { auth } from "./auth"`: This line imports the authentication middleware function from a file named `auth.js`. This middleware is responsible for ensuring a user is authenticated before accessing protected routes.
+
+**Applying the middleware:**
+
+`export default auth((req) => { ... })`: This line applies the `auth` middleware to any route that utilizes this middleware file. The callback function within the middleware (`(req) => { ... }`), gives you access to the request object (`req`), which includes authentication information in `req.auth`.
+
+**Config object for selective application:**
+
+`export const config = { ... }`: This object allows you to fine-tune how the middleware is applied. It's currently configured to **selectively protect routes**, not all routes.
+
+**Matcher for route exclusion:**
+
+`matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"]`: This regular expression specifies which routes **shouldn't** be protected by the authentication middleware. It excludes:
+  - API routes (`/api`)
+  - Static assets (`_next/static`, `_next/image`)
+  - The favicon (`favicon.ico`)
+
+The middleware does not protect **all** routes by default. It selectively protects routes based on the `matcher` configuration. The specified routes in the `matcher` will be accessible even for unauthenticated users.
+
+*To protect all routes,* remove the `matcher` configuration. With no `matcher`, the middleware will apply to all routes.
+
+
+The middleware code in this project protects all routes **except** for the following:
+
+**1. Public Routes:**
+
+- These are explicitly defined in the `publicRoutes` array imported from `routes.js`.
+- Users can access these routes regardless of their authentication status.
+
+**2. API Routes:**
+
+- These are identified by the URL starting with `authAPIPrefix` (e.g., `/api/auth`).
+- The middleware allows access to all API routes, regardless of authentication.
+
+**3. Auth Routes:**
+
+- These are defined in the `authRoutes` array from `routes.js` (e.g., `/auth/login`).
+- **Special case:**
+  - If a **logged-in user** accesses an auth route, they are **redirected** to the `DEFAULT_LOGIN_REDIRECT` page (likely the dashboard or a similar protected route). This prevents infinite loops when logged-in users attempt to access login or registration pages.
+  - **Unauthenticated users** can freely access these routes.
+
+**Here's a table summarizing protected and non-protected routes:**
+
+| Category                    | Description                                          | Protected by Middleware?                    |
+| --------------------------- | ---------------------------------------------------- | ------------------------------------------- |
+| Public Routes               | Routes defined in `publicRoutes`                     | No                                          |
+| API Routes                  | Routes starting with `authAPIPrefix`                 | No                                          |
+| Auth Routes (Logged In)     | Routes defined in `authRoutes` (e.g., `/auth/login`) | Yes (redirects to `DEFAULT_LOGIN_REDIRECT`) |
+| Auth Routes (Not Logged In) | Routes defined in `authRoutes` (e.g., `/auth/login`) | No                                          |
+
+The regular expression in the `matcher` configuration (`/((?!api|_next/static|_next/image|favicon.ico).*)`) **excludes** specific routes (API, static assets, favicon) from the middleware protection. The `isLoggedIn` check utilizes the double negation (`!!req.auth`) to convert the potentially null value to a boolean.
+
 ### Edge Runtime
 
 This refers to the environment in which code executes at the edge of a network, closer to users. This means the code runs on servers located geographically closer to users, reducing latency and improving performance. Edge runtimes can be used for various purposes, including:

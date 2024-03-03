@@ -16,6 +16,8 @@ export { default as LoginButton } from "@/src/components/auth/login-btn";
 export { LoginForm } from "@/src/components/auth/login-form";
 export { RegisterForm } from "@/src/components/auth/register-form";
 export { VerificationForm } from "@/src/components/auth/verification-form";
+export { ResetPassword } from "@/src/components/auth/resetpassword";
+export { ResetPasswordForm } from "@/src/components/auth/reset-password-form";
 
 export { AuthHeader } from "@/src/components/sub-components/auth_header";
 export { SocialInfo } from "@/src/components/sub-components/social-info";
