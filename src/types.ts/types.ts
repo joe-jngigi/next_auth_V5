@@ -27,6 +27,7 @@ export type T_LINKTEXTPROPS = {
 };
 
 export type T_VALIDATE_DATA_TYPES = {
+  twoFactor?: boolean;
   success?: string;
   error?: string;
   info?: string;

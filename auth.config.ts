@@ -6,7 +6,7 @@ import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
 import { LoginSchema } from "@/src/schemas";
-import { getUserByEmail } from "./src/data/user_data";
+import { getUserByEmail } from "@/src/data-queries/user_data";
 
 export default {
   providers: [
@@ -28,6 +28,8 @@ export default {
         if (validatedLoginData.success) {
           const { email, password } = validatedLoginData.data;
 
+          console.log({email, password});
+          
           /**
            * After we have validated the credentials we received from the custom user, we now have to check two things
            * if the user exists, through the email.

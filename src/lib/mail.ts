@@ -92,11 +92,10 @@ export const sendVerificationEmail = async (email: string, token: string) => {
   });
 };
 
-
 /**
  * This function will be used to send password reset link email to the user.
- * @param email 
- * @param token 
+ * @param email
+ * @param token
  */
 export const sendPasswordResetEmail = async (email: string, token: string) => {
   const confirmationLink = `http://localhost:3000/auth/new-password?token=${token}`;
@@ -166,6 +165,59 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
 
     `;
 
+  await resend.emails.send({
+    from: "Joe_J | 2FA | <onboarding@resend.dev>",
+    to: email,
+    subject: "Next-Auth | 2 Factor Authentication",
+    html: emailHtml,
+  });
+};
+
+/**
+ * After the user saves the 2FA to the database, we will then take and;
+ * this will be used to send an email with the generated 2FA code
+ * @param email 
+ * @param token 
+ */
+export const sendTwoFAAuthToken = async (email: string, token: string) => {
+  const emailHtml = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        
+        <title>Email Template</title>
+        <style>
+        /* Styles for the email */
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        h1 {
+            padding: 2px;
+            border-radius: 8px;
+            background-color: black;
+            text-align: center;
+            color: #00ff80;
+        }
+        p {
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+        <h1>Welcome to Next-Auth V5</h1>
+        <p>You Recieved this email because you requested a 2 Factor Authentication</p>
+        <h1>${token}</h1>
+        
+        </div>
+    </body>
+    </html>`;
   await resend.emails.send({
     from: "Joe_J | <onboarding@resend.dev>",
     to: email,

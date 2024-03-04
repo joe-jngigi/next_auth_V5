@@ -1,11 +1,16 @@
 import * as zod from "zod";
 
+/**Login schema with 
+ * @values {twoFAcode?, email, password}
+ */
 export const LoginSchema = zod.object({
+  twoFAcode: zod.optional(zod.string()),
   email: zod.string().email(),
   password: zod.string().min(3, {
     message: "Input a password of 4 or more characters",
   }),
 });
+
 export const NewPasswordSchema = zod.object({
   password: zod.string().min(4, {
     message: "Input a password of 4 or more characters",

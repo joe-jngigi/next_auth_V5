@@ -1,7 +1,7 @@
 "use server";
 
-import { getVerificationTokenByToken } from "@/src/data/verification_token";
-import { getUserByEmail } from "@/src/data/user_data";
+import { getVerificationTokenByToken } from "@/src/data-queries/verification_token";
+import { getUserByEmail } from "@/src/data-queries/user_data";
 import { data_base } from "@/src/lib/prisma-db";
 
 /**
@@ -49,10 +49,10 @@ export const verificationOfToken = async (token: string) => {
       email: existingToken.email,
     },
   });
-    
-    await data_base.verificationToken.delete({
-        where: {id: existingToken.id}
-    })
 
-    return {success: "Email verified successfully!"}
+  await data_base.verificationToken.delete({
+    where: { id: existingToken.id },
+  });
+
+  return { success: "Email verified successfully!" };
 };

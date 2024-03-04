@@ -18,6 +18,10 @@ pnpm dev
 bun dev
 ```
 
+<hr style="border: 2px solid cyan; background-color: cyan;" />
+
+# Next-auth v5
+
 ## `Bcrypt`
 
 `Bcrypt` is used to hash the passwords used in the project. We install it using `npm install bcrypt` and `npm install -D @types/bcrypt`
@@ -404,6 +408,8 @@ This section now creates an entity in the database using the destructured data.
   })
 ```
 
+<hr style="border: 2px solid cyan; background-color: cyan;" />
+
 # Auth Version 5
 
 > "We worked hard to avoid having to save your config options in a separate file and then pass them around as `authOptions` throughout your application. To achieve this, we settled on moving the configuration file to the root of the repository and having it export an auth function you can use everywhere else."
@@ -467,7 +473,7 @@ Middleware refers to a function that runs before handling a request. It is commo
 
 In the context of Next.js, middleware is often used with API routes. Middleware functions can be added to API routes using the middleware property in the handler function. These middleware functions execute sequentially, allowing you to modify the request or response as needed before the API route's main logic executes.
 
- **Here's a breakdown of the code's role in protecting routes in `NextAuth` v5:**
+**Here's a breakdown of the code's role in protecting routes in `NextAuth` v5:**
 
 **Importing the `auth` middleware:**
 
@@ -484,14 +490,14 @@ In the context of Next.js, middleware is often used with API routes. Middleware 
 **Matcher for route exclusion:**
 
 `matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"]`: This regular expression specifies which routes **shouldn't** be protected by the authentication middleware. It excludes:
-  - API routes (`/api`)
-  - Static assets (`_next/static`, `_next/image`)
-  - The favicon (`favicon.ico`)
+
+- API routes (`/api`)
+- Static assets (`_next/static`, `_next/image`)
+- The favicon (`favicon.ico`)
 
 The middleware does not protect **all** routes by default. It selectively protects routes based on the `matcher` configuration. The specified routes in the `matcher` will be accessible even for unauthenticated users.
 
-*To protect all routes,* remove the `matcher` configuration. With no `matcher`, the middleware will apply to all routes.
-
+_To protect all routes,_ remove the `matcher` configuration. With no `matcher`, the middleware will apply to all routes.
 
 The middleware code in this project protects all routes **except** for the following:
 
@@ -1065,6 +1071,8 @@ Sometimes, when we add the same email we get a `signin` page that is from the `n
   },
 ```
 
+<hr style="border: 2px solid cyan; background-color: cyan;" />
+
 # Email Verification
 
 **Token Generation**
@@ -1350,3 +1358,38 @@ When we register a user using credentials, we will generate a **Verification Tok
 > We need to check if the user is verified, if not, this will generate a new token and send an email. We do this in the frontend and the `auth configuration file` in the `signIn` callback.
 
 In the verification page, we then trigger the `verificationOfToken` function, where it checks if the token is expired, the user exists, which in return it will update the user's `emailVerified` field, and then delete the token.
+
+<hr style="border: 2px solid cyan; background-color: cyan;" />
+
+# Two-Factor Authentication 2FA
+
+When creating a two-factor authentication, we create the same token model as the email verification and the password verification. We also added two fields as shown:
+
+```prisma
+model User {
+  id                    String    @id @default(cuid())
+  name                  String?
+  email                 String?   @unique
+  emailVerified         DateTime?
+  image                 String?
+  password              String?
+  role                  UserRole  @default(USER)
+  isTwoFactorEnabled    Boolean   @default(false)
+  twoFactorConfirmation TwoFactorConfirmation?
+  accounts              Account[]
+
+}
+
+model TwoFactorConfirmation {
+  id                    String    @id @default(cuid())
+  userId                String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+}
+```
+
+After we have confirmed and pushed these schemas to the database, the next we have written the queries, which will be used to query the data on `2FA`. We have then created a token generation in the tokens for generating the 2FA Authentication which is then saved to the database as a `token` with an expiry time. Once we generate, the code, we will then email the user the `code`.
+
+In the users table, we have `isTwoFactorEnabled` with a default value of **false**. We want a logic such that, when it is `true`, the user will not be able to log in.

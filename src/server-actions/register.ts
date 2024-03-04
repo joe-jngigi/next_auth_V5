@@ -5,7 +5,7 @@ import { hash } from "bcryptjs";
 
 import { RegisterSchema } from "@/src/schemas/index";
 import { data_base } from "@/src/lib/prisma-db";
-import { getUserByEmail } from "@/src/data/user_data";
+import { getUserByEmail } from "@/src/data-queries/user_data";
 import { generateVerificationToken } from "@/src/lib/tokens";
 import { sendVerificationEmail } from "@/src/lib/mail";
 

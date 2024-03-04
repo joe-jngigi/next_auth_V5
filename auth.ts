@@ -3,8 +3,9 @@ import NextAuth from "next-auth";
 import authConfig from "@/auth.config";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { data_base } from "@/src/lib/prisma-db";
-import { getUserById } from "@/src/data/user_data";
+import { getUserById } from "@/src/data-queries/user_data";
 import { UserRole } from "@prisma/client";
+import { getTwoFactorConfirmationByUserId } from "./src/data-queries/two_factor_confirmation";
 
 // console.log("AuthConfig: ", authConfig);
 
@@ -45,7 +46,7 @@ export const {
       }
 
       /**
-       * This checjs for an existingUser, before checking if the user is emailVerified
+       * This checks for an **existingUser**, before checking if the user is emailVerified
        * If the user is not verified, they are denied access through the middleware
        * This provides an extra layer security, as we have already do the same on the frontend part
        */
@@ -55,8 +56,32 @@ export const {
       }
 
       // TODO Add 2FA checking
+      /**
+       * This will check if the user has two factor authentication as true or false
+       * If false, the user will be allowed to login
+       *
+       * if the 2FA is true, we will then check if it is confirmed;
+       * if not, we will not allow the user to login.
+       *
+       * Take away:
+       * - **The user should not be allowed to login if they don't have a confirmation!**
+       *
+       * If the user has two factor confirmation, we will delete the confirmation
+       * Or have an expiry date
+       */
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+          existingUser.id
+        );
+        if (!twoFactorConfirmation) {
+          return false;
+        }
+
+        await data_base.twoFactorConfirmation.delete({
+          where: { id: twoFactorConfirmation.id },
+        });
+      }
       return true;
-      
     },
 
     /**

@@ -1,13 +1,16 @@
 import { v4 as uuidv4 } from "uuid";
 import { data_base } from "@/src/lib/prisma-db";
 
-import { getVerificationTokenByEmail } from "@/src/data/verification_token";
-import { getResetpasswordTokenByEmail } from "@/src/data/passwordresettoken";
+import crypto from "crypto";
+
+import { getVerificationTokenByEmail } from "@/src/data-queries/verification_token";
+import { getResetpasswordTokenByEmail } from "@/src/data-queries/password_reset_token";
+import { getTwoFactorTokenByEmail } from "@/src/data-queries/two_factor_auth_token";
 
 /**
  * This function is used to generate an email verification_token and save in to the database
  * @param email
- * 
+ *
  * @returns {createPasswordResetToken}
  * @type {id: string; email: string; token: string; expires: Date;}
  */
@@ -82,6 +85,8 @@ export const generatePasswordResetToken = async (email: string) => {
     });
   }
 
+  // ======================================================================================================
+
   /**
    * This fuction will then create a token, that will return an obect with
    * @type {id: string; email: string; token: string; expires: Date;}
@@ -96,4 +101,34 @@ export const generatePasswordResetToken = async (email: string) => {
     });
 
   return createPasswordResetToken;
+};
+
+/**
+ * This functions generates a 2FA code that will expire after one hour
+ * It is then saved to the database
+ *
+ * @param email from the user
+ * @returns {twoFAuthToken}
+ */
+export const generateTwoFactorToken = async (email: string) => {
+  const twoFAtoken = crypto.randomInt(100_000, 1_000_000).toString();
+  const expires = new Date(new Date().getTime() + 5 * 60 * 1000);
+
+  // Delete if there is an existing token for the user=email
+  const existingToken = await getTwoFactorTokenByEmail(email);
+  if (existingToken) {
+    await data_base.twoFactorAuthToken.delete({
+      where: { id: existingToken.id },
+    });
+  }
+
+  const twoFAuthToken = await data_base.twoFactorAuthToken.create({
+    data: {
+      email,
+      expires,
+      token: twoFAtoken,
+    },
+  });
+
+  return twoFAuthToken;
 };

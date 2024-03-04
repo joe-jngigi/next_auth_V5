@@ -1,5 +1,5 @@
 "use server";
-import { getUserByEmail } from "@/src/data/user_data";
+import { getUserByEmail } from "@/src/data-queries/user_data";
 
 import * as zod from "zod";
 import { ResetPasswordSchema } from "@/src/schemas";
@@ -41,8 +41,8 @@ export const resetPassword = async (
   // TODO: generateVerificationToken and send Email
 
   const getPasswordToken = await generatePasswordResetToken(email);
-  
-  await sendPasswordResetEmail(getPasswordToken.email, getPasswordToken.token)
+
+  await sendPasswordResetEmail(getPasswordToken.email, getPasswordToken.token);
 
   return { success: "Reset Email sent!" };
 };

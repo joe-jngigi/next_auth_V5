@@ -1,4 +1,4 @@
-import { data_base } from "../lib/prisma-db";
+import { data_base } from "@/src/lib/prisma-db";
 
 /**
  * This fucntion is used to fetch an entity of the existing data in the using the token passed

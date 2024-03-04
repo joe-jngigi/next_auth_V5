@@ -3,9 +3,9 @@
 import * as zod from "zod";
 import { hash } from "bcryptjs";
 import { NewPasswordSchema } from "@/src/schemas";
-import { getResetpasswordTokenByToken } from "@/src/data/passwordresettoken";
+import { getResetpasswordTokenByToken } from "@/src/data-queries/password_reset_token";
 
-import { getUserByEmail } from "@/src/data/user_data";
+import { getUserByEmail } from "@/src/data-queries/user_data";
 import { data_base } from "@/src/lib/prisma-db";
 
 export const newPasswordAction = async (
@@ -48,8 +48,6 @@ export const newPasswordAction = async (
     data: { password: hashedPassword },
   });
 
-  // const databaseResetToken = await getResetpasswordTokenByToken()
-
   await data_base.passwordVerificationToken.delete({
     where: { id: existingToken.id },
   });
@@ -58,4 +56,3 @@ export const newPasswordAction = async (
 };
 
 // $2a$10$igLphpK6NVQmtVodk5dTyus.fA77g6k2zcI3msxRV1 / ar.kDaYhMS;
-

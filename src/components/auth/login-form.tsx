@@ -17,6 +17,7 @@ import { useSearchParams } from "next/navigation";
 
 export const LoginForm = () => {
   const [isPending, setTransition] = useTransition();
+  const [showTwoFactor, setShowTwoFactor] = useState(false);
 
   const searchParams = useSearchParams();
   const urlError = searchParams.get("error");
@@ -27,6 +28,7 @@ export const LoginForm = () => {
     defaultValues: {
       email: "",
       password: "",
+      twoFAcode: "",
     },
   });
 
@@ -41,19 +43,32 @@ export const LoginForm = () => {
         if (data) {
           if (data.error) {
             toast.error(data.error, { theme: "colored" });
+            form.reset();
             return;
           }
           if (data.success) {
             toast.success(data.success, { theme: "colored" });
+            form.reset();
             return;
           }
-          toast.info(data.info, { theme: "colored" });
-          return;
+          if (data.info) {
+            toast.info(data.info, { theme: "colored" });
+            form.reset();
+            return;
+          }
+          if (data.twoFactor) {
+            toast.info("2FA code has been sent to your Email", {
+              theme: "colored",
+            });
+            setShowTwoFactor((prev) => !prev);
+            return;
+          }
         }
         if (urlError === "OAuthAccountNotLinked") {
           toast.error("Email Already in use with another provider", {
             theme: "colored",
           });
+          form.reset();
         }
 
         // toast.error(data.error, { theme: "colored" });
@@ -74,49 +89,78 @@ export const LoginForm = () => {
       <ShadcnForm.Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4 w-full">
-            {/* Email Field */}
-            <ShadcnForm.FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <ShadcnForm.FormItem>
-                  <ShadcnForm.FormLabel>Email</ShadcnForm.FormLabel>
-                  <ShadcnForm.FormControl>
-                    <Input
-                      autoComplete="username webauthn"
-                      disabled={isPending}
-                      {...field}
-                      placeholder="josephngigi775@gmail.com"
-                      type="email"
-                      className="drop-shadow-md"
-                    />
-                  </ShadcnForm.FormControl>
-                  <ShadcnForm.FormMessage />
-                </ShadcnForm.FormItem>
-              )}
-            />
+            {showTwoFactor && (
+              <>
+                <ShadcnForm.FormField
+                  control={form.control}
+                  name="twoFAcode"
+                  render={({ field }) => (
+                    <ShadcnForm.FormItem>
+                      <ShadcnForm.FormLabel>
+                        Two Factor Auth Code
+                      </ShadcnForm.FormLabel>
+                      <ShadcnForm.FormControl>
+                        <Input
+                          autoComplete="username webauthn"
+                          disabled={isPending}
+                          {...field}
+                          placeholder="123456"
+                          className="drop-shadow-md"
+                        />
+                      </ShadcnForm.FormControl>
+                      <ShadcnForm.FormMessage />
+                    </ShadcnForm.FormItem>
+                  )}
+                />
+              </>
+            )}
+            {!showTwoFactor && (
+              <>
+                {/* Email Field */}
+                <ShadcnForm.FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <ShadcnForm.FormItem>
+                      <ShadcnForm.FormLabel>Email</ShadcnForm.FormLabel>
+                      <ShadcnForm.FormControl>
+                        <Input
+                          autoComplete="username webauthn"
+                          disabled={isPending}
+                          {...field}
+                          placeholder="josephngigi775@gmail.com"
+                          type="email"
+                          className="drop-shadow-md"
+                        />
+                      </ShadcnForm.FormControl>
+                      <ShadcnForm.FormMessage />
+                    </ShadcnForm.FormItem>
+                  )}
+                />
 
-            {/* password Field  */}
-            <ShadcnForm.FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <ShadcnForm.FormItem>
-                  <ShadcnForm.FormLabel>Password</ShadcnForm.FormLabel>
-                  <ShadcnForm.FormControl>
-                    <Input
-                      autoComplete="current-password"
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Password"
-                      type="password"
-                      className="drop-shadow-md"
-                    />
-                  </ShadcnForm.FormControl>
-                  <ShadcnForm.FormMessage />
-                </ShadcnForm.FormItem>
-              )}
-            />
+                {/* password Field  */}
+                <ShadcnForm.FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <ShadcnForm.FormItem>
+                      <ShadcnForm.FormLabel>Password</ShadcnForm.FormLabel>
+                      <ShadcnForm.FormControl>
+                        <Input
+                          autoComplete="current-password"
+                          disabled={isPending}
+                          {...field}
+                          placeholder="Password"
+                          type="password"
+                          className="drop-shadow-md"
+                        />
+                      </ShadcnForm.FormControl>
+                      <ShadcnForm.FormMessage />
+                    </ShadcnForm.FormItem>
+                  )}
+                />
+              </>
+            )}
           </div>
 
           <Button
@@ -124,7 +168,7 @@ export const LoginForm = () => {
             type="submit"
             className="variant_btn w-full"
           >
-            Login
+            {showTwoFactor ? "Confirm 2FA" : "Login"}
           </Button>
         </form>
       </ShadcnForm.Form>
