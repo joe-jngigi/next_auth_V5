@@ -3,6 +3,8 @@ import { getUserByEmail } from "@/src/data/user_data";
 
 import * as zod from "zod";
 import { ResetPasswordSchema } from "@/src/schemas";
+import { generatePasswordResetToken } from "@/src/lib/tokens";
+import { sendPasswordResetEmail } from "../lib/mail";
 
 /**
  * This is a function used to send an email used for the reset of the password
@@ -38,6 +40,9 @@ export const resetPassword = async (
 
   // TODO: generateVerificationToken and send Email
 
-  const getPAssowrd = await generatePasswordResetToken(checkUserExist.email);
+  const getPasswordToken = await generatePasswordResetToken(email);
+  
+  await sendPasswordResetEmail(getPasswordToken.email, getPasswordToken.token)
+
   return { success: "Reset Email sent!" };
 };

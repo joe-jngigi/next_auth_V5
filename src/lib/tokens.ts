@@ -60,7 +60,7 @@ export const generateVerificationToken = async (email: string) => {
  *
  * @param email
  */
-const generatePasswordResetToken = async (email: string) => {
+export const generatePasswordResetToken = async (email: string) => {
   const token: string = uuidv4();
 
   /**

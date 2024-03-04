@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useTransition } from "react";
 
 import * as ShadcnForm from "@/src/components/ui/form";
 
@@ -8,24 +8,23 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as zod from "zod";
 import { toast } from "react-toastify";
-
-import { LoginSchema } from "@/src/schemas/index";
-import { Button, CardWrapper, Input } from "@/src";
-import { loginAction } from "@/src/server-actions/login";
-import { T_VALIDATE_DATA_TYPES } from "@/src/types.ts/types";
 import { useSearchParams } from "next/navigation";
 
-export const LoginForm = () => {
+import { NewPasswordSchema } from "@/src/schemas/index";
+import { Button, CardWrapper, Input } from "@/src";
+
+import { T_VALIDATE_DATA_TYPES } from "@/src/types.ts/types";
+import { newPasswordAction } from "@/src/server-actions/new-password";
+
+export const ResetPasswordForm = () => {
   const [isPending, setTransition] = useTransition();
-
-  const searchParams = useSearchParams();
-  const urlError = searchParams.get("error");
-
+  const newParams = useSearchParams();
+  const token = newParams.get("token");
+  
   // const form
-  const form = useForm<zod.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<zod.infer<typeof NewPasswordSchema>>({
+    resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
-      email: "",
       password: "",
     },
   });
@@ -35,9 +34,9 @@ export const LoginForm = () => {
    * @param console.log({ ...form })} ;
    */
 
-  const onSubmit = (values: zod.infer<typeof LoginSchema>) => {
+  const onSubmit = (values: zod.infer<typeof NewPasswordSchema>) => {
     setTransition(() => {
-      loginAction(values).then((data: T_VALIDATE_DATA_TYPES) => {
+      newPasswordAction(values, token).then((data: T_VALIDATE_DATA_TYPES) => {
         if (data) {
           if (data.error) {
             toast.error(data.error, { theme: "colored" });
@@ -50,11 +49,6 @@ export const LoginForm = () => {
           toast.info(data.info, { theme: "colored" });
           return;
         }
-        if (urlError === "OAuthAccountNotLinked") {
-          toast.error("Email Already in use with another provider", {
-            theme: "colored",
-          });
-        }
 
         // toast.error(data.error, { theme: "colored" });
       });
@@ -63,39 +57,14 @@ export const LoginForm = () => {
 
   return (
     <CardWrapper
-      headerTitle="next Auth | Login"
-      headerLabel="Welcome, Let's Authenticate you"
-      backButtonHref="/auth/register"
-      backButtonLabel="Don't have an account?"
-      showSocial={true}
-      showForgotPassword
-      forgotPasswordHref="/auth/reset"
+      headerTitle="next Auth | New Password"
+      headerLabel="Enter your new Password"
+      backButtonHref="/auth/login"
+      backButtonLabel="Back to Login"
     >
       <ShadcnForm.Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4 w-full">
-            {/* Email Field */}
-            <ShadcnForm.FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <ShadcnForm.FormItem>
-                  <ShadcnForm.FormLabel>Email</ShadcnForm.FormLabel>
-                  <ShadcnForm.FormControl>
-                    <Input
-                      autoComplete="username webauthn"
-                      disabled={isPending}
-                      {...field}
-                      placeholder="josephngigi775@gmail.com"
-                      type="email"
-                      className="drop-shadow-md"
-                    />
-                  </ShadcnForm.FormControl>
-                  <ShadcnForm.FormMessage />
-                </ShadcnForm.FormItem>
-              )}
-            />
-
             {/* password Field  */}
             <ShadcnForm.FormField
               control={form.control}
@@ -124,7 +93,7 @@ export const LoginForm = () => {
             type="submit"
             className="variant_btn w-full"
           >
-            Login
+            Reset Your Password
           </Button>
         </form>
       </ShadcnForm.Form>
