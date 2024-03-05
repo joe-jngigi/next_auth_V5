@@ -311,7 +311,7 @@ body {
 }
 
 .head_text {
-  @apply mt-5 text-4xl font-extrabold dark:text-white drop-shadow-md text-black sm:text-6xl;
+  @apply text-xl font-extrabold dark:text-white drop-shadow-md text-black;
 }
 
 .logo_text {

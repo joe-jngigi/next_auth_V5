@@ -1393,3 +1393,124 @@ model TwoFactorConfirmation {
 After we have confirmed and pushed these schemas to the database, the next we have written the queries, which will be used to query the data on `2FA`. We have then created a token generation in the tokens for generating the 2FA Authentication which is then saved to the database as a `token` with an expiry time. Once we generate, the code, we will then email the user the `code`.
 
 In the users table, we have `isTwoFactorEnabled` with a default value of **false**. We want a logic such that, when it is `true`, the user will not be able to log in.
+
+We have guarded the user in the `signIn callback`, where we check if the user has the `isTwoFactorEnabled` as a **true** or **false** value. If it is false, the user is allowed to sign in.
+
+We still have the same logic in the server login server action. We check if the user has the `isTwoFactorEnabled` enabled, where if it is not enabled, we allow the user to sign in directly, and if not, we go ahead with the process of confirmation and generation of the **two-factor authentication**. If the user has not returned any 2FA execute the second part of generating the 2FA where we then take the token returned and send it in an email.
+
+The process of confirming the 2FA if available involves checking if the code the user input is the same as the one in the database, if it is the same, we then check if the token is expired, where if all this is true, we will then delete the token from the database, where we then check if the user has `existingConfirmation`, if they have an existing confirmation, we delete it and then create another, which will be deleted.
+
+```TS
+if (checUser.isTwoFactorEnabled && checUser.email) {
+  if (twoFAcode) {
+      const existTwoFactor = await getTwoFactorTokenByEmail(checUser.email);
+
+      if (!existTwoFactor) {
+        return { error: "2FA token does not exist" };
+      }
+
+      if (existTwoFactor.token !== twoFAcode) {
+        return { error: "Invalid 2FA code" };
+      }
+
+      const isExpired = new Date(existTwoFactor.expires) < new Date();
+      if (isExpired) {
+        return { info: "The 2FA code is already expired. Login Again!" };
+      }
+
+      // Create the 2FA confirmation so that the user can login
+      await data_base.twoFactorAuthToken.delete({
+        where: { id: existTwoFactor.id },
+      });
+
+      const existConfirmation = await getTwoFactorConfirmationByUserId(
+        checUser.id
+      );
+      if (existConfirmation) {
+        await data_base.twoFactorConfirmation.delete({
+          where: { id: existConfirmation.id },
+        });
+      }
+
+      await data_base.twoFactorConfirmation.create({
+        data: {
+          userId: checUser.id,
+        },
+      });
+    } else {
+      const twoFactorAuthToken = await generateTwoFactorToken(checUser.email);
+      await sendTwoFAAuthToken(
+        twoFactorAuthToken.email,
+        twoFactorAuthToken.token
+      );
+      return { twoFactor: true };
+    }}
+```
+
+# Session And Session Data
+
+In the server components, we can have the server components functions, but sometimes we need to use get the session data in a **client component**. In the server components, the `auth()` function provides the session data. The server components allow us to have a `signOut` function.
+
+```TSX
+import { auth, signOut } from "@/auth";
+import { Button } from "@/src";
+import React from "react";
+
+const SettingsPage = async () => {
+  const session = await auth();
+
+  /**
+   * @function signOut is exclusively for server components
+   */
+
+  return (
+    <div className="h-full flex-c-center flex-col ">
+      <form
+        action={async () => {
+          "use server";
+          await signOut();
+        }}
+      >
+        <Button className="">Sign Out</Button>
+      </form>
+
+      <div>User ID: {JSON.stringify(session?.user?.id)}</div>
+      <div>Session: {JSON.stringify(session)}</div>
+    </div>
+  );
+};
+
+export default SettingsPage;
+```
+
+In the client component, we use the `useSession()` react hook, but we have to wrap the main layout page subjected to use the `useSession` with a session provider.
+
+```TSX
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth";
+
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const session = await auth();
+  return (
+    <SessionProvider session={session}>
+      <html lang="en">
+        <body className="font-poppins !scroll-smooth">
+          <ToastContainer
+            draggable
+            position="bottom-right"
+            className="text-xs font-display"
+          />
+
+          {children}
+        </body>
+      </html>
+    </SessionProvider>
+  );
+}
+```
+
+

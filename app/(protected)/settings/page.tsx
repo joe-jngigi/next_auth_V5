@@ -1,27 +1,22 @@
-import { auth, signOut } from "@/auth";
-import { Button } from "@/src";
+"use client";
 import React from "react";
 
-const SettingsPage = async () => {
-  const session = await auth();
+import { Button } from "@/src";
+import { logOut } from "@/src/server-actions/logout";
+import { useCurrentUser } from "@/src/hooks/user_current_user";
 
-  /**
-   * @function signOut is exclusively for server components
-   */
+const SettingsPage = () => {
+  const session = useCurrentUser()
+
+  const onClick = () => {
+    logOut();
+  };
 
   return (
-    <div className="h-full flex-c-center flex-col ">
-      <form
-        action={async () => {
-          "use server";
-          await signOut();
-        }}
-      >
-        <Button className="">Sign Out</Button>
-      </form>
-
-      <div>User ID: {JSON.stringify(session?.user?.id)}</div>
-      <div>Session: {JSON.stringify(session)}</div>
+    <div className="w-full p-2 ">
+      <Button onClick={onClick} className="">
+        Sign Out
+      </Button>
     </div>
   );
 };

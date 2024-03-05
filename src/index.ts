@@ -13,6 +13,9 @@ export { Label } from "@/src/components/ui/label";
 // Custom Auth Components
 export { default as LoginButton } from "@/src/components/auth/login-btn";
 
+export { LogOutButton } from "@/src/components/auth/logout_btn";
+export { UserButton } from "@/src/components/auth/user_button";
+
 export { LoginForm } from "@/src/components/auth/login-form";
 export { RegisterForm } from "@/src/components/auth/register-form";
 export { VerificationForm } from "@/src/components/auth/verification-form";
