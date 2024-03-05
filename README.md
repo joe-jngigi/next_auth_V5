@@ -1447,6 +1447,8 @@ if (checUser.isTwoFactorEnabled && checUser.email) {
     }}
 ```
 
+<hr style="border: 2px solid cyan; background-color: cyan;" />
+
 # Session And Session Data
 
 In the server components, we can have the server components functions, but sometimes we need to use get the session data in a **client component**. In the server components, the `auth()` function provides the session data. The server components allow us to have a `signOut` function.
@@ -1513,4 +1515,28 @@ export default async function RootLayout({
 }
 ```
 
+## `JSON.stringify()`
 
+`JSON.stringify()` in JavaScript is primarily used to convert JavaScript objects to JSON strings. However, it's not limited to just objects. It can handle the following types of values; **Objects (including arrays and custom objects), Strings, numbers, Boolean and null**
+
+It is appropriate to use `JSON.stringify()` when you want to convert a JavaScript object into a JSON string. In the provided code snippet, `JSON.stringify()` is being used to convert the user object into a JSON string before rendering it within the `<section>` element.
+
+This can be useful when you need to pass data from your server to your client-side code in a format that can be easily transmitted over the network or stored in a database. By converting the user object to a JSON string, you can ensure that it is in a format that can be easily consumed by other parts of your application. This code will give the following: `{"name":"Joseph Ngigi","email":"josephngigi775@gmail.com","image":null,"id":"cltcvau5s0000g1tisvsy3i00","role":"USER"}`
+
+```TSX
+import React from "react";
+import { useServerUser } from "@/src/lib/auth";
+
+const ServerPage = async () => {
+
+  const user = await useServerUser();
+
+  return (
+    <section>
+      {JSON.stringify(user)}
+    </section>
+  );
+};
+
+export default ServerPage;
+```

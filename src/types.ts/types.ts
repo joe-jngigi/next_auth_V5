@@ -2,6 +2,8 @@
  * @joe-jngigi: Add @types {export types}
  */
 
+import { extendedUser } from "@/next-auth";
+
 // Layout Props
 export type T_LAYOUTPROPS = {
   children: React.ReactNode;
@@ -31,4 +33,9 @@ export type T_VALIDATE_DATA_TYPES = {
   success?: string;
   error?: string;
   info?: string;
+};
+
+export type T_USERTYPES = {
+  user?: extendedUser;
+  label?: string;
 };
