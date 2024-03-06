@@ -2,14 +2,15 @@ import { DefaultSession } from "next-auth";
 import { UserRole } from "@prisma/client";
 
 export type extendedUser = DefaultSession["user"] & {
-    role: UserRole
-    twoFactorAuth: boolean
-}
+  role: UserRole;
+  twoFactorAuth: boolean;
+  isOAuth: boolean;
+};
 
 declare module "next-auth" {
-    interface Session {
-        user?: extendedUser
-    }
+  interface Session {
+    user?: extendedUser;
+  }
 }
 
 // types/next-auth.d.ts
@@ -37,4 +38,3 @@ declare module "next-auth" {
 //     role?: "admin" | "user" | string; // Adjust roles as needed
 //   }
 // }
-

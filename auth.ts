@@ -5,7 +5,8 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { data_base } from "@/src/lib/prisma-db";
 import { getUserById } from "@/src/data-queries/user_data";
 import { UserRole } from "@prisma/client";
-import { getTwoFactorConfirmationByUserId } from "./src/data-queries/two_factor_confirmation";
+import { getTwoFactorConfirmationByUserId } from "@/src/data-queries/two_factor_confirmation";
+import { getUserAccountById } from "@/src/data-queries/accounts";
 
 // console.log("AuthConfig: ", authConfig);
 
@@ -99,6 +100,12 @@ export const {
         session.user.twoFactorAuth = token.twoFactorAuth as boolean;
       }
 
+      if (session.user) {
+        session.user.name = token.name;
+        session.user.email = token.email as string
+        session.user.isOAuth = token.isOAuth as boolean
+      }
+
       return session;
     },
 
@@ -107,10 +114,10 @@ export const {
      *
      * We have just seen that we can just add a new field as `token.newRol = ""`
      * To add a new field from the database, we can just create a field like that;
-     * 
+     *
      * Then we can asign a field from the database.
      * `token.twoFactorAuth = existingUser.isTwoFactorEnabled;`
-     * 
+     *
      * @param param0
      * @returns
      */
@@ -124,12 +131,19 @@ export const {
       if (!existingUser) {
         return token;
       }
-
+      const userAccount = await getUserAccountById(existingUser.id)
+      if (userAccount) {
+        
+      }
       // token.newRol = ""
+      token.email = existingUser.email;
+      token.name = existingUser.name;
+      token.isOAuth = !!existingUser
+
       token.role = existingUser.role;
       token.twoFactorAuth = existingUser.isTwoFactorEnabled;
 
-      // console.log({ token: token });
+      console.log({ token: token });
 
       return token;
     },

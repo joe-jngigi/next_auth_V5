@@ -1,6 +1,12 @@
 import * as zod from "zod";
 
-/**Login schema with 
+export const settingsSchemas = zod.object({
+  name: zod.optional(zod.string()),
+  email: zod.optional(zod.string()),
+  password: zod.optional(zod.string()),
+});
+
+/**Login schema with
  * @values {twoFAcode?, email, password}
  */
 export const LoginSchema = zod.object({

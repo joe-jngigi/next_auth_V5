@@ -10,6 +10,7 @@ export { Button } from "@/src/components/ui/button";
 export { Input } from "@/src/components/ui/input";
 export { Label } from "@/src/components/ui/label";
 export { Badge } from "@/src/components/ui/badge";
+export * as avatar from "@/src/components/ui/avatar";
 
 // Custom Auth Components
 export { default as LoginButton } from "@/src/components/auth/login-btn";
