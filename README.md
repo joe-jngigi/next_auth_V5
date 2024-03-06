@@ -882,7 +882,7 @@ JWT:
 }
 ```
 
-We can the first create a custom field in the `jwt token`. You will note below what the log adds a field called custom. Note that this field can be given any name. This field only appears in the
+We can the first create a custom field in the `jwt token`. You will note below what the log adds a field called custom. Note that this field can be given any name. This field only appears in the `jwt` function, but it is not available in the `session`
 
 ```TS
 async jwt({ token }) {
@@ -910,7 +910,7 @@ async jwt({ token }) {
 
 ```
 
-In the `session` function, we can also add other new fields that are not in the `session` like shown. These fields will only appear in the `session`, and they are not in the `token` field. But if I reference a field from the `token`, it will then appear in the `session` field
+In the `session` function, we can also add other new fields that are not in the `jwt` like shown. These fields will only appear in the `session`, and they are not in the `token` field. But if I reference a field from the `token`, it will then appear in the `session` field.
 
 ````TS
     async session({ session, token }) {
@@ -1540,3 +1540,163 @@ const ServerPage = async () => {
 
 export default ServerPage;
 ```
+
+In the context of the API code provided, `.json` is a method used to serialize JavaScript objects into JSON format. In the `NextResponse.json()` method, it takes an object as an argument and converts it into a JSON string. This method is commonly used in web development when sending JSON responses from a server to a client, typically in APIs or web applications.
+
+Here's how it's used in the code:
+
+```TS
+return NextResponse.json({ userAccount, status: 200 });
+```
+
+In this line, you're returning a JSON response containing the `userAccount` object along with an HTTP status code of `200` (which indicates success). The `NextResponse.json()` method serializes this object into a JSON string before sending it as the response body.
+
+If you prefer to use `JSON.stringify()` instead of `NextResponse.json()` in your code, you can do so. Here's how you can modify your code to use `JSON.stringify()`:
+
+```typescript
+import { auth } from "@/auth";
+import { useServerUser } from "@/src/lib/auth";
+import { data_base } from "@/src/lib/prisma-db";
+import { UserRole } from "@prisma/client";
+
+export const GET = async (request: Response) => {
+  try {
+    const {} = await request.json();
+
+    const session = await useServerUser();
+    if (!session) {
+      return { error: "User is not logged in!" };
+    }
+
+    if (session.role !== UserRole.ADMIN) {
+      return { error: "User is not an Admin!" };
+    }
+
+    const userAccount = await data_base.account.findFirst({
+      where: { id: session.id },
+    });
+
+    const response = {
+      userAccount,
+      status: 200,
+    };
+
+    return new Response(JSON.stringify(response), {
+      headers: { "Content-Type": "application/json" },
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    return new Response(JSON.stringify({ error: "Something went wrong" }), {
+      headers: { "Content-Type": "application/json" },
+      status: 500,
+    });
+  }
+};
+```
+
+- We use `JSON.stringify()` to convert the response object into a JSON string.
+- We create a new `Response` object and pass the JSON string as the body.
+- We set the appropriate `Content-Type` header to `application/json`.
+- Then, we set the correct HTTP status code for success or error responses.
+
+This approach achieves the same result as using `NextResponse.json()`, but with more manual handling of the response creation. The line `const {} = await request.json();` is used to parse the incoming request body as JSON in an API endpoint. Let's break it down:
+
+1. `request.json()`: This method reads the body of the incoming HTTP request and parses it as JSON. It returns a promise that resolves with the parsed JSON object.
+
+2. `await`: This keyword is used to wait for the promise returned by `request.json()` to resolve. Since `request.json()` returns a promise, using `await` allows the code to pause execution until the promise is fulfilled.
+
+3. `const {} = ...`: This line uses object destructuring to extract properties from the JSON object returned by `request.json()`. However, in this case, it appears that the extracted properties are not being used. The empty object `{}` signifies that we're not interested in any specific properties of the JSON object. It's a common pattern when you're only interested in triggering the parsing of the JSON request body without actually using any of its properties directly.
+
+Technically, this line ensures that the request body is parsed as JSON and is available for further processing, even if the parsed JSON object is not directly utilized in the subsequent code. It's often used in API endpoints where the request body is expected to be in JSON format, and the endpoint doesn't necessarily need to access specific properties from the JSON object immediately.
+
+**Fetching Data from the API**
+
+To fetch the response for both `Response` and `NextResponse`, you can modify the `fetch` call accordingly. Here's how you can do it:
+
+For `Response`:
+
+```javascript
+fetch("/api/admin")
+  .then((response) => {
+    if (response.ok) {
+      return response.json(); // Parse the response body as JSON
+    } else {
+      throw new Error("Request failed with status: " + response.status);
+    }
+  })
+  .then((data) => {
+    console.log(data); // Process the parsed JSON data
+  })
+  .catch((error) => {
+    console.error(error); // Handle any errors
+  });
+```
+
+For `NextResponse`:
+
+```javascript
+fetch("/api/admin")
+  .then((response) => {
+    if (response.ok) {
+      return response.text(); // Parse the response body as text
+    } else {
+      throw new Error("Request failed with status: " + response.status);
+    }
+  })
+  .then((data) => {
+    const parsedData = JSON.parse(data); // Parse the JSON data
+    console.log(parsedData); // Process the parsed JSON data
+  })
+  .catch((error) => {
+    console.error(error); // Handle any errors
+  });
+```
+
+In both cases:
+
+1. We first check if the response is successful (`response.ok`). If it is, we proceed to parse the response body.
+2. If the response is not successful, we throw an error.
+3. After parsing the response body, we process the data accordingly.
+4. We handle any errors that may occur during the fetch operation.
+
+Please note the difference in parsing the response body:
+
+- For `Response`, we directly call `response.json()` to parse the JSON response.
+- For `NextResponse`, we first call `response.text()` to get the response body as text, then we use `JSON.parse()` to parse the JSON data from the text. This is because `NextResponse` returns the JSON response as a text string.
+
+**Sending Data to the API**
+To send data from the client to the API, you typically use the `fetch()` function or other similar methods to make an HTTP request. You can include the data you want to send in the request body. Here's how you can modify your code to send data to the API:
+
+```TS
+// Data to be sent to the API
+const requestData = {
+  // Include your data here
+};
+
+fetch("/api/admin", {
+  method: "POST", // Specify the HTTP method (e.g., POST, PUT, DELETE)
+  headers: {
+    "Content-Type": "application/json", // Specify the content type of the request body
+  },
+  body: JSON.stringify(requestData), // Convert the data to JSON format and send it in the request body
+})
+  .then((response) => {
+    if (response.ok) {
+      return response.json(); // Parse the response body as JSON
+    } else {
+      throw new Error("Request failed with status: " + response.status);
+    }
+  })
+  .then((data) => {
+    console.log(data); // Process the parsed JSON data returned from the API
+  })
+  .catch((error) => {
+    console.error(error); // Handle any errors
+  });
+```
+
+1. We specify the HTTP method as `POST` to indicate that we are sending data to the server.
+2. We set the `Content-Type` header to `application/json` to indicate that the request body contains JSON data.
+3. We use `JSON.stringify()` to convert the `requestData` object into a JSON string and send it as the request body.
+4. On the server-side, you would need to handle this incoming POST request and parse the JSON data from the request body. The specific implementation would depend on your server framework (e.g., Express.js for Node.js, Django for Python, etc.).

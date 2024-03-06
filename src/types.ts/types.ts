@@ -3,6 +3,7 @@
  */
 
 import { extendedUser } from "@/next-auth";
+import { UserRole } from "@prisma/client";
 
 // Layout Props
 export type T_LAYOUTPROPS = {
@@ -10,6 +11,7 @@ export type T_LAYOUTPROPS = {
   mode?: "modal" | "redirect";
   asChild?: boolean;
   className?: string;
+  allowedRoles?: UserRole;
 };
 
 export type TLAYOUT_CARDWRAPPER_EXTENDS = T_LAYOUTPROPS & {

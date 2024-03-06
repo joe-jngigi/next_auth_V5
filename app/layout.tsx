@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "@/src/styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { Toaster } from "sonner";
 
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
@@ -21,6 +22,7 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="en">
         <body className="font-poppins !scroll-smooth">
+          <Toaster position="top-right" richColors/>
           <ToastContainer
             draggable
             position="bottom-right"

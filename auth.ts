@@ -95,9 +95,25 @@ export const {
       if (token.role && session.user) {
         session.user.role = token.role as UserRole;
       }
+      if (session.user) {
+        session.user.twoFactorAuth = token.twoFactorAuth as boolean;
+      }
 
       return session;
     },
+
+    /**
+     * How do we add field to the JWT token, which is returned as the session also?
+     *
+     * We have just seen that we can just add a new field as `token.newRol = ""`
+     * To add a new field from the database, we can just create a field like that;
+     * 
+     * Then we can asign a field from the database.
+     * `token.twoFactorAuth = existingUser.isTwoFactorEnabled;`
+     * 
+     * @param param0
+     * @returns
+     */
     async jwt({ token }) {
       if (!token.sub) {
         return token;
@@ -109,7 +125,9 @@ export const {
         return token;
       }
 
+      // token.newRol = ""
       token.role = existingUser.role;
+      token.twoFactorAuth = existingUser.isTwoFactorEnabled;
 
       // console.log({ token: token });
 

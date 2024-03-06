@@ -7,7 +7,7 @@ const ServerPage = async () => {
   const label = "User Information";
 
   return (
-    <section className=" min-h-[93vh] w-full px-4 p-2 mx-auto flex-c-center">
+    <section className=" min-h-[92vh] w-full px-4 p-2 mx-auto flex-c-center">
       <UserInfo user={user} label={label} />
     </section>
   );

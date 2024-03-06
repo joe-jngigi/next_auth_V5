@@ -7,14 +7,15 @@ import * as dropdown from "@/src/components/ui/dropdown-menu";
 import * as avatar from "@/src/components/ui/avatar";
 
 import { useCurrentUser } from "@/src/hooks/user_current_user";
-import { LogOutButton } from "@/src";
+import { Badge, LogOutButton } from "@/src";
 
 export const UserButton = () => {
   const user = useCurrentUser();
   return (
-    <dropdown.DropdownMenu>
+    <dropdown.DropdownMenu >
       {/* Dropdown menu button */}
-      <dropdown.DropdownMenuTrigger>
+      <dropdown.DropdownMenuTrigger className="flex-c-center gap-2 px-2 rounded-lg py-0.5 ">
+        <h3 className="text-sm font-semibold text-muted-foreground">Hello, <span className="text-emerald-500">{user?.name}</span></h3>
         {/* User Image */}
         <avatar.Avatar>
           <avatar.AvatarImage src={user?.image || ""} />
@@ -27,14 +28,14 @@ export const UserButton = () => {
       {/* Dropdown menu content */}
       <dropdown.DropdownMenuContent align="end">
         <dropdown.DropdownMenuLabel>
-          Hello, <span>{user?.name}</span>
+          Role: <Badge>{user?.role}</Badge>
         </dropdown.DropdownMenuLabel>
 
         <dropdown.DropdownMenuSeparator />
 
         <dropdown.DropdownMenuItem className="cursor-pointer">
           <LogOutButton className=" w-full flex-between">
-            Logout 
+            Logout
             <TbDoorExit size={20} />
           </LogOutButton>
         </dropdown.DropdownMenuItem>

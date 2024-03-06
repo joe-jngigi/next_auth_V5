@@ -9,6 +9,7 @@ export {
 export { Button } from "@/src/components/ui/button";
 export { Input } from "@/src/components/ui/input";
 export { Label } from "@/src/components/ui/label";
+export { Badge } from "@/src/components/ui/badge";
 
 // Custom Auth Components
 export { default as LoginButton } from "@/src/components/auth/login-btn";
@@ -29,3 +30,4 @@ export { AuthErrorCard } from "@/src/components/sub-components/auth-error-card";
 
 // Custom Usage Components
 export { default as CardWrapper } from "@/src/components/card-wrapper";
+export { RoleGate } from "@/src/components/role_gate";

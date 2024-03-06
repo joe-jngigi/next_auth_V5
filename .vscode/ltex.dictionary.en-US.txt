@@ -10,3 +10,4 @@ prisma
 PRISMA
 ORMs
 referentially
+destructuring

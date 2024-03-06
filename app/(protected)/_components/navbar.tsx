@@ -22,7 +22,7 @@ export const Navbar = () => {
       {/* Links and Pages */}
       <div className="flex-c-center gap-5">
         {ui_link_data.map((ui_link) => (
-          <Link
+          <Link key={Math.random()}
             className={`${
               pathName == ui_link.href ? "text-emerald-500 font-semibold" : "dark:text-white font-normal"
             } duration-200 transition-all hover:font-extrabold text-sm`}
