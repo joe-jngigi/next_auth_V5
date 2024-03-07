@@ -12,13 +12,15 @@ import { Badge, LogOutButton } from "@/src";
 export const UserButton = () => {
   const user = useCurrentUser();
   return (
-    <dropdown.DropdownMenu >
+    <dropdown.DropdownMenu>
       {/* Dropdown menu button */}
       <dropdown.DropdownMenuTrigger className="flex-c-center gap-2 px-2 rounded-lg py-0.5 ">
-        <h3 className="text-sm font-semibold text-muted-foreground">Hello, <span className="text-emerald-500">{user?.name}</span></h3>
+        <h3 className="text-sm font-semibold text-muted-foreground">
+          Hello, <span className="text-emerald-500">{user.session?.name}</span>
+        </h3>
         {/* User Image */}
         <avatar.Avatar>
-          <avatar.AvatarImage src={user?.image || ""} />
+          <avatar.AvatarImage src={user.session?.image || ""} />
           <avatar.AvatarFallback className="border border-black dark:text-black">
             <FaUserSecret size={24} />
           </avatar.AvatarFallback>
@@ -28,7 +30,7 @@ export const UserButton = () => {
       {/* Dropdown menu content */}
       <dropdown.DropdownMenuContent align="end">
         <dropdown.DropdownMenuLabel>
-          Role: <Badge>{user?.role}</Badge>
+          Role: <Badge>{user.session?.role}</Badge>
         </dropdown.DropdownMenuLabel>
 
         <dropdown.DropdownMenuSeparator />

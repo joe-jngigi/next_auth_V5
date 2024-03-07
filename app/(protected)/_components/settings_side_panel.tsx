@@ -16,13 +16,13 @@ export const SettingsSidePanel = () => {
     <div className="h-full">
       <div className="dark:bg-slate-900 bg-slate-100 shadow-lg p-2 cursor-pointer rounded-xl flex-c-center gap-3">
         <avatar.Avatar>
-          <avatar.AvatarImage src={session?.image || ""} />
+          <avatar.AvatarImage src={session.session?.image || ""} />
           <avatar.AvatarFallback className="border border-black dark:text-black">
             <FaUser size={24} />
           </avatar.AvatarFallback>
         </avatar.Avatar>
 
-        <p className="text-xs">{session?.email || "user@mail.org"}</p>
+        <p className="text-xs">{session.session?.email || "user@mail.org"}</p>
       </div>
 
       <div className="mt-3">

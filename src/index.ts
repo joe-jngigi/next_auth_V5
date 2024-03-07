@@ -11,6 +11,7 @@ export { Input } from "@/src/components/ui/input";
 export { Label } from "@/src/components/ui/label";
 export { Badge } from "@/src/components/ui/badge";
 export * as avatar from "@/src/components/ui/avatar";
+export * as shadCnSelect from "@/src/components/ui/select";
 
 // Custom Auth Components
 export { default as LoginButton } from "@/src/components/auth/login-btn";

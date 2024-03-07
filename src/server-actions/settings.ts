@@ -3,7 +3,7 @@
 import * as zod from "zod";
 import { settingsSchemas } from "@/src/schemas";
 
-import {  getUserById } from "../data-queries/user_data";
+import { getUserById } from "../data-queries/user_data";
 import { data_base } from "../lib/prisma-db";
 import { useServerUser } from "../lib/auth";
 

@@ -35,6 +35,7 @@ const SettingsPage = async () => {
         </>
         <>
           <SettingsMainpanel />
+          
         </>
       </SettingsPanel>
     </div>
