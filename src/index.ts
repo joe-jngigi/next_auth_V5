@@ -12,6 +12,7 @@ export { Label } from "@/src/components/ui/label";
 export { Badge } from "@/src/components/ui/badge";
 export * as avatar from "@/src/components/ui/avatar";
 export * as shadCnSelect from "@/src/components/ui/select";
+export { Switch } from "@/src/components/ui/switch";
 
 // Custom Auth Components
 export { default as LoginButton } from "@/src/components/auth/login-btn";

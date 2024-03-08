@@ -9,7 +9,7 @@ export const settingsSchemas = zod
     ),
 
     isTwoFactorEnabled: zod.optional(zod.boolean()),
-    // role: zod.enum([UserRole.ADMIN, UserRole.USER]),
+    role: zod.enum([UserRole.ADMIN, UserRole.USER]),
 
     password: zod.optional(zod.string().min(4)),
     newPassword: zod.optional(zod.string().min(4)),

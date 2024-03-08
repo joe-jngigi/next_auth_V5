@@ -27,6 +27,7 @@ export const {
   auth,
   signIn,
   signOut,
+  unstable_update,
 } = NextAuth({
   pages: {
     signIn: "/auth/login",
@@ -132,13 +133,11 @@ export const {
         return token;
       }
       const userAccount = await getUserAccountById(existingUser.id)
-      if (userAccount) {
-        
-      }
+      
       // token.newRol = ""
       token.email = existingUser.email;
       token.name = existingUser.name;
-      token.isOAuth = !!existingUser
+      token.isOAuth = !!userAccount
 
       token.role = existingUser.role;
       token.twoFactorAuth = existingUser.isTwoFactorEnabled;
