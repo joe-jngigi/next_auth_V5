@@ -1,20 +1,24 @@
 "use client";
-
 import React, { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as zod from "zod";
-import * as shadCnForm from "@/src/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormField,
+} from "@/src/components/ui/form";
 import { Input } from "@/src";
 import { toast } from "sonner";
-import { Button, Separator, shadCnSelect } from "@/src";
-
+import { Button, Separator } from "@/src";
 import { settingsActions } from "@/src/server-actions/settings";
 import { settingsSchemas } from "@/src/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCurrentUser } from "@/src/hooks/user_current_user";
 
 export const SettingsMainpanel = () => {
-  const [isPending, setUseTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const user = useCurrentUser();
   const dateToday = new Date();
 
@@ -28,33 +32,12 @@ export const SettingsMainpanel = () => {
     },
   });
 
-  const onSubmitUser = async (values: zod.infer<typeof settingsSchemas>) => {
-    setUseTransition(() => {
-      settingsActions(values).then((data) => {
-        if (data.success) {
-          toast.success("Name Change successful", {
-            dismissible: true,
-            description: <>{dateToday.toDateString()}</>,
-            cancel: {
-              label: "Cancel",
-              onClick: () => toast.info("Cancelled"),
-            },
-          });
-        }
-
-        if (data.error) {
-          toast.success("Something went wrong!", {
-            dismissible: true,
-            description: <>{dateToday.toDateString()}</>,
-            cancel: {
-              label: "Cancel",
-              onClick: () => toast.info("Cancelled"),
-            },
-          });
-        }
-      });
+  const onSubmit = (values: zod.infer<typeof settingsSchemas>) => {
+    startTransition(() => {
+      console.log("Check Settings submit");
     });
   };
+
   return (
     <div id="#start" className="overflow-y-auto pl-2">
       <div className="mb-2">
@@ -66,23 +49,20 @@ export const SettingsMainpanel = () => {
       <Separator className="dark:bg-slate-800 bg-gray-300" />
 
       <div className="my-3">
-        <shadCnForm.Form {...form}>
-          <form
-            className="space-y-6"
-            onSubmit={form.handleSubmit(onSubmitUser)}
-          >
+        <Form {...form}>
+          <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-5">
               {/* User Account */}
               <h2 className="mb-3 font-semibold text-gray-500">User Account</h2>
               <div className=" flex flex-row gap-5 mb-5">
                 {/* Name Field */}
-                <shadCnForm.FormField
+                <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
-                    <shadCnForm.FormItem className="text-sm w-[400px]">
-                      <shadCnForm.FormLabel>Name</shadCnForm.FormLabel>
-                      <shadCnForm.FormControl>
+                    <FormItem className="text-sm w-[400px]">
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
                         <Input
                           className="dark:border-slate-800 w-full"
                           {...field}
@@ -90,19 +70,19 @@ export const SettingsMainpanel = () => {
                           disabled={isPending}
                           type="text"
                         />
-                      </shadCnForm.FormControl>
-                    </shadCnForm.FormItem>
+                      </FormControl>
+                    </FormItem>
                   )}
                 />
 
                 {/* Email Field */}
-                <shadCnForm.FormField
+                <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
-                    <shadCnForm.FormItem className="text-sm w-[400px]">
-                      <shadCnForm.FormLabel>Email</shadCnForm.FormLabel>
-                      <shadCnForm.FormControl>
+                    <FormItem className="text-sm w-[400px]">
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
                         <Input
                           className="dark:border-slate-800 w-full"
                           {...field}
@@ -110,8 +90,8 @@ export const SettingsMainpanel = () => {
                           disabled={isPending}
                           type="email"
                         />
-                      </shadCnForm.FormControl>
-                    </shadCnForm.FormItem>
+                      </FormControl>
+                    </FormItem>
                   )}
                 />
               </div>
@@ -122,57 +102,18 @@ export const SettingsMainpanel = () => {
               <h2 className="mb-3 font-semibold text-gray-500">
                 Password and Security
               </h2>
-              <div className="flex flex-row gap-5 mb-5">
-                <shadCnForm.FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <shadCnForm.FormItem className="text-sm w-[400px]">
-                      <shadCnForm.FormLabel>Current Password</shadCnForm.FormLabel>
-                      <shadCnForm.FormControl>
-                        <Input
-                          className="dark:border-slate-800 w-full"
-                          {...field}
-                          placeholder="Password"
-                          disabled={isPending}
-                          type="password"
-                        />
-                      </shadCnForm.FormControl>
-                    </shadCnForm.FormItem>
-                  )}
-                />
-                <shadCnForm.FormField
-                  control={form.control}
-                  name="newPassword"
-                  render={({ field }) => (
-                    <shadCnForm.FormItem className="text-sm w-[400px]">
-                      <shadCnForm.FormLabel>New Password</shadCnForm.FormLabel>
-                      <shadCnForm.FormControl>
-                        <Input
-                          className="dark:border-slate-800 w-full"
-                          {...field}
-                          placeholder="New Password"
-                          disabled={isPending}
-                          type="password"
-                        />
-                      </shadCnForm.FormControl>
-                    </shadCnForm.FormItem>
-                  )}
-                />
-              </div>
+              <div className="flex flex-row gap-5 mb-5"></div>
             </div>
 
             <Separator className="dark:bg-slate-800 bg-gray-300 " />
 
-            <div>
-              
-            </div>
+            <div></div>
 
             <Button disabled={isPending} type="submit" className="variant_btn">
               Save Changes
             </Button>
           </form>
-        </shadCnForm.Form>
+        </Form>
       </div>
     </div>
   );

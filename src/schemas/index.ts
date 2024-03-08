@@ -8,18 +8,11 @@ export const settingsSchemas = zod
       zod.string().email({ message: "Input the right Email" })
     ),
 
-    isTwoFactorEnabled: zod.optional(zod.string()),
-    role: zod.enum([UserRole.ADMIN, UserRole.USER]),
-    password: zod.optional(
-      zod.string().min(4, {
-        message: "A minimum of four characters is required",
-      })
-    ),
-    newPassword: zod.optional(
-      zod.string().min(4, {
-        message: "A minimum of four characters is required",
-      })
-    ),
+    isTwoFactorEnabled: zod.optional(zod.boolean()),
+    // role: zod.enum([UserRole.ADMIN, UserRole.USER]),
+
+    password: zod.optional(zod.string().min(4)),
+    newPassword: zod.optional(zod.string().min(4)),
   })
   .refine(
     (data) => {
@@ -29,7 +22,7 @@ export const settingsSchemas = zod
 
       return true;
     },
-    { message: "New password is required!" }
+    { message: "New password is required!", path: ["newPassword"] }
   )
   .refine(
     (data) => {
@@ -39,7 +32,7 @@ export const settingsSchemas = zod
 
       return true;
     },
-    { message: "Password Field is required!" }
+    { message: "Password Field is required!", path: ["password"] }
   );
 
 /**Login schema with
