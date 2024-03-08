@@ -9,7 +9,6 @@ import { Separator } from "@/src";
 import { T_USERTYPES } from "@/src/types.ts/types";
 
 export const UserInfo: React.FC<T_USERTYPES> = ({ user, label }) => {
-  console.log(user);
 
   const onCopy = (data?: string | null) => {
     if (!data) {

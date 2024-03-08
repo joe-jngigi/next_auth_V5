@@ -13,11 +13,26 @@ export default {
     Github({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      profile(profile) {
+        return {
+          id: profile.id.toString(),
+          name: profile.name,
+          email: profile.email,
+        };
+      },
     }),
 
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      profile(profile) {
+        return {
+          id: profile.id,
+          name: profile.name,
+          email: profile.email, // Access email from Google profile
+          image: profile.picture,
+        };
+      },
     }),
 
     Credentials({
@@ -28,8 +43,6 @@ export default {
         if (validatedLoginData.success) {
           const { email, password } = validatedLoginData.data;
 
-          console.log({email, password});
-          
           /**
            * After we have validated the credentials we received from the custom user, we now have to check two things
            * if the user exists, through the email.

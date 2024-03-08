@@ -1,6 +1,5 @@
 import React from 'react'
 import { T_LINKTEXTPROPS } from "@/src/types.ts/types";
-import { cn } from '../../lib/utils';
 
 export const AuthHeader: React.FC<T_LINKTEXTPROPS> = ({ label, title }) => {
   return (

@@ -26,7 +26,6 @@ export const newPasswordAction = async (
   const hashedPassword = await hash(password, 10);
   const existingToken = await getResetpasswordTokenByToken(token);
 
-  console.log("existingToken", existingToken);
 
   if (!existingToken) {
     return {

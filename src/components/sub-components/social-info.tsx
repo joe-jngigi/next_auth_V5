@@ -1,5 +1,5 @@
 import React from "react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
@@ -11,8 +11,9 @@ import { toast } from "react-toastify";
 export const SocialInfo = () => {
   const searchParams = useSearchParams();
   const urlError = searchParams.get("error");
+  const callBackUrl = searchParams.get("callBackUrl");
 
-  const handleClick = (provider: "google" | "github") => {
+  const handleClick = async (provider: "google" | "github") => {
     if (urlError === "OAuthAccountNotLinked") {
       toast.error("Email Already in use with another provider", {
         theme: "colored",
@@ -20,11 +21,9 @@ export const SocialInfo = () => {
 
       return;
     }
-    console.log(provider);
 
     signIn(provider, {
-      callbackUrl: DEFAULT_LOGIN_REDIRECT,
-      // redirect: DEFAULT_LOGIN_REDIRECT,
+      callbackUrl: callBackUrl || DEFAULT_LOGIN_REDIRECT,
     });
   };
   return (

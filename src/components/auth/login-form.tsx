@@ -13,7 +13,8 @@ import { LoginSchema } from "@/src/schemas/index";
 import { Button, CardWrapper, Input } from "@/src";
 import { loginAction } from "@/src/server-actions/login";
 import { T_VALIDATE_DATA_TYPES } from "@/src/types.ts/types";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export const LoginForm = () => {
   const [isPending, setTransition] = useTransition();
@@ -21,6 +22,9 @@ export const LoginForm = () => {
 
   const searchParams = useSearchParams();
   const urlError = searchParams.get("error");
+  const callbackUrl = searchParams.get("callBackUrl");
+
+  const router = useRouter();
 
   // const form
   const form = useForm<zod.infer<typeof LoginSchema>>({
@@ -39,7 +43,7 @@ export const LoginForm = () => {
 
   const onSubmit = (values: zod.infer<typeof LoginSchema>) => {
     setTransition(() => {
-      loginAction(values).then((data: T_VALIDATE_DATA_TYPES) => {
+      loginAction(values, callbackUrl).then((data: T_VALIDATE_DATA_TYPES) => {
         if (data) {
           if (data.error) {
             toast.error(data.error, { theme: "colored" });
@@ -49,6 +53,9 @@ export const LoginForm = () => {
           if (data.success) {
             toast.success(data.success, { theme: "colored" });
             form.reset();
+            // router.push();
+            window.location.replace(callbackUrl || DEFAULT_LOGIN_REDIRECT);
+            window.location.reload();
             return;
           }
           if (data.info) {

@@ -14,9 +14,11 @@ import { Button, CardWrapper, Input } from "@/src";
 
 import { T_VALIDATE_DATA_TYPES } from "@/src/types.ts/types";
 import { registerAction } from "@/src/server-actions/register";
+import { useRouter } from "next/navigation";
 
 export const RegisterForm = () => {
   const [isPending, setTransition] = useTransition();
+  const router = useRouter();
 
   // const form
   const form = useForm<zod.infer<typeof RegisterSchema>>({
@@ -36,9 +38,32 @@ export const RegisterForm = () => {
   const onSubmit = (values: zod.infer<typeof RegisterSchema>) => {
     setTransition(() => {
       registerAction(values).then((data: T_VALIDATE_DATA_TYPES) => {
-        toast.error(data.error, { theme: "colored" });
-        toast.success(data.success, { theme: "colored" });
-        toast.info(data.info, { theme: "colored" });
+        if (data) {
+          if (data.error) {
+            toast.error(data.error, { theme: "colored" });
+            form.reset();
+            return;
+          }
+          if (data.success) {
+            toast.success(data.success, { theme: "colored" });
+            form.reset();
+            router.replace("/auth/login");
+            router.refresh();
+            return;
+          }
+          if (data.info) {
+            toast.info(data.info, { theme: "colored" });
+            form.reset();
+            return;
+          }
+          if (data.twoFactor) {
+            toast.info("2FA code has been sent to your Email", {
+              theme: "colored",
+            });
+
+            return;
+          }
+        }
       });
       //  toast.success("User Test", {theme: "colored"});
     });

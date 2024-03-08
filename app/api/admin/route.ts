@@ -24,9 +24,6 @@ export const GET = async (request: Response) => {
       where: { id: session.id },
     });
 
-      console.log(userAccount);
-      
-
     return NextResponse.json({
       userAccount,
       status: 200,

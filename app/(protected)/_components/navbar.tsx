@@ -11,7 +11,7 @@ export const Navbar = () => {
   const pathName = usePathname();
 
   return (
-    <nav className="w-full p-3 shadow-sm dark:bg-[rgb(20,20,20)] bg-white flex-between">
+    <nav className="w-full p-3 shadow-sm dark:bg-slate-950 bg-white flex-between">
       {/* Logo */}
       <div>
         <h1 className="head_text">

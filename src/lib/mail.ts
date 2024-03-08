@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+const domain = process.env.NEXT_PUBLIC_URL
 
 /**
  * This function is used to send verification email to the user signing in
@@ -17,7 +18,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
    *
    * @token expiration, and whether it exists and change the users email
    */
-  const confirmationLink = `http://localhost:3000/auth/new-verification?token=${token}`;
+  const confirmationLink = `${domain}/auth/new-verification?token=${token}`;
   const emailHtml = `
     <!DOCTYPE html>
     <html lang="en">
@@ -98,7 +99,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
  * @param token
  */
 export const sendPasswordResetEmail = async (email: string, token: string) => {
-  const confirmationLink = `http://localhost:3000/auth/new-password?token=${token}`;
+  const confirmationLink = `${domain}/auth/new-password?token=${token}`;
   const emailHtml = `
     <!DOCTYPE html>
     <html lang="en">

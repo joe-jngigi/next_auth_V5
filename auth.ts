@@ -142,8 +142,6 @@ export const {
       token.role = existingUser.role;
       token.twoFactorAuth = existingUser.isTwoFactorEnabled;
 
-      console.log({ token: token });
-
       return token;
     },
   },

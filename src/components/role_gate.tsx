@@ -8,7 +8,6 @@ export const RoleGate: React.FC<T_LAYOUTPROPS> = async ({
   allowedRoles,
   className,
 }) => {
-  console.log(allowedRoles);
 
   const role = await useUserRole();
   if (role !== allowedRoles) {

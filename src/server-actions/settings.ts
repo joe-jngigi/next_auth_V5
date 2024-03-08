@@ -90,7 +90,6 @@ export const settingsActions = async (
     validatedValues.data.newPassword = undefined;
   }
 
-  console.log(validatedValues);
 
   await data_base.user.update({
     where: { id: userDatabase.id },

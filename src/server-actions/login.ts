@@ -17,7 +17,10 @@ import { getTwoFactorTokenByEmail } from "../data-queries/two_factor_auth_token"
 import { data_base } from "../lib/prisma-db";
 import { getTwoFactorConfirmationByUserId } from "../data-queries/two_factor_confirmation";
 
-export const loginAction = async (values: zod.infer<typeof LoginSchema>) => {
+export const loginAction = async (
+  values: zod.infer<typeof LoginSchema>,
+  callbackUrl?: string | null
+) => {
   const validatedFieldValues = LoginSchema.safeParse(values);
 
   if (!validatedFieldValues.success) {
@@ -91,8 +94,8 @@ export const loginAction = async (values: zod.infer<typeof LoginSchema>) => {
       /**
        * What we want here is not to return anything, but we will want to create a 2FA confirmation
        * But before we do that, we will first delete any existing Confirmation
-       * 
-       * Remember, this confirmation is destroyed once the user has been logged in. 
+       *
+       * Remember, this confirmation is destroyed once the user has been logged in.
        * ie. the user has confirmed they recieved the 2FA code in their email.
        */
       const existConfirmation = await getTwoFactorConfirmationByUserId(
@@ -127,7 +130,7 @@ export const loginAction = async (values: zod.infer<typeof LoginSchema>) => {
   try {
     await signIn("credentials", {
       // TODO redirectTo: callbacks || DEFAULT_LOGIN_REDIRECT
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
       email,
       password,
     });

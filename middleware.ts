@@ -11,7 +11,6 @@ import {
 export const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
-  
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
 
@@ -71,7 +70,14 @@ export default auth((req) => {
    * @type {boolean}
    */
   if (!isLoggedIn && !isPublicRoute) {
-    return Response.redirect(new URL("/auth/login", nextUrl));
+    let callBackUrl = nextUrl.pathname;
+    if (nextUrl.search) {
+      callBackUrl += nextUrl.search;
+    }
+    const encodedCallbackUrl = encodeURIComponent(callBackUrl);
+    return Response.redirect(
+      new URL(`/auth/login?callBackUrl=${encodedCallbackUrl}`, nextUrl)
+    );
   }
 
   return;
@@ -87,10 +93,9 @@ export default auth((req) => {
  *  console.log("Is logged in Status: ", isLoggedIn);
  *
  * This returns a boolean state, when we add the exclamation marks, otherwise it will return a null value.
- * 
+ *
  * Optionally, don't invoke Middleware on some paths
  */
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
-

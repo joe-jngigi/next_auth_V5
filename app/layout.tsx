@@ -21,7 +21,7 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <body className="font-poppins !scroll-smooth">
+        <body className="font-poppins !scroll-smooth xl:max-w-[2000px] mx-auto">
           <Toaster position="top-right" richColors/>
           <ToastContainer
             draggable
