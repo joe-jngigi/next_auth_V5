@@ -2,7 +2,6 @@
 import React from "react";
 
 import { IoIosArrowForward } from "react-icons/io";
-import { RxAvatar } from "react-icons/rx";
 
 import { avatar } from "@/src";
 import { FaUser } from "react-icons/fa6";

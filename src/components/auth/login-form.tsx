@@ -24,7 +24,6 @@ export const LoginForm = () => {
   const urlError = searchParams.get("error");
   const callbackUrl = searchParams.get("callBackUrl");
 
-  const router = useRouter();
 
   // const form
   const form = useForm<zod.infer<typeof LoginSchema>>({

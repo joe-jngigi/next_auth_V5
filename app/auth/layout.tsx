@@ -1,4 +1,3 @@
-import { T_LAYOUTPROPS } from "@/src/types.ts/types";
 import React from "react";
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
