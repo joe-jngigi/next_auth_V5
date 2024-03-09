@@ -34,3 +34,4 @@ export { AuthErrorCard } from "@/src/components/sub-components/auth-error-card";
 // Custom Usage Components
 export { default as CardWrapper } from "@/src/components/card-wrapper";
 export { RoleGate } from "@/src/components/role_gate";
+export { ProjectText } from "@/src/components/project_text";
