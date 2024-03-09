@@ -10,6 +10,10 @@ import { UserButton } from "@/src";
 export const Navbar = () => {
   const pathName = usePathname();
 
+  const handleClick = () => {
+    window.location.reload();
+  };
+
   return (
     <nav className="w-full p-3 shadow-sm dark:bg-slate-950 bg-white flex-between">
       {/* Logo */}
@@ -22,9 +26,13 @@ export const Navbar = () => {
       {/* Links and Pages */}
       <div className="flex-c-center gap-5">
         {ui_link_data.map((ui_link) => (
-          <Link key={Math.random()}
+          <Link
+            key={Math.random()}
+            onClick={handleClick}
             className={`${
-              pathName == ui_link.href ? "text-emerald-500 font-semibold" : "dark:text-white font-normal"
+              pathName == ui_link.href
+                ? "text-emerald-500 font-semibold"
+                : "dark:text-white font-normal"
             } duration-200 transition-all hover:font-extrabold text-sm`}
             href={ui_link.href}
           >
