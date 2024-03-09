@@ -1,24 +1,31 @@
 import React from "react";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
 
-import { newUserRole } from "@/src/lib/auth";
-import { Badge } from "@/src/components/ui/badge";
+import { ServerUser } from "@/src/lib/auth";
 import { RoleGate, Separator } from "@/src";
 import { UserRole } from "@prisma/client";
 import { TestRoutes } from "@/app/(protected)/_components/test_routes";
 
+import { HeaderSet } from "../_components/header_set";
+import { data_base } from "@/src/lib/prisma-db";
+
 const AdminPage = async () => {
-  const userRole = newUserRole();
+  const userRole = await ServerUser();
+
+  const user = await data_base.user.findFirst({
+    where: { email: userRole?.email },
+  });
+  
   return (
     <div className="min-h-[92vh] w-full px-3 p-2 mx-auto">
-      <div className="logo_text text-xl flex-between items-center select-none">
-        <h2>Testing User Roles</h2>
-        <div className="text-muted-foreground flex flex-row items-center gap-2">
-          Role: <Badge className="font-poppins">{userRole}</Badge>
-        </div>
-      </div>
+      {/* Header */}
+      <HeaderSet
+        name="Testing Admin routes"
+        icon={<MdOutlineAdminPanelSettings size={22} />}
+      />
       <div className="mt-3 rounded-lg dark:bg-slate-950 bg-white flex-c-center w-full p-3 h-[87vh] overflow-y-auto">
         <div className="flex-c-center flex-col">
-          <RoleGate
+          <RoleGate role= {user?.role}
             className="w-[1000px] mx-auto flex-c-center flex-col"
             allowedRoles={UserRole.ADMIN}
           >

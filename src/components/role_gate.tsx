@@ -1,15 +1,19 @@
+"use client"
+
 import React from "react";
 import { T_LAYOUTPROPS } from "@/src/types.ts/types";
-import { newUserRole } from "@/src/lib/auth";
-import { cn } from "@/src/lib/utils";
 
-export const RoleGate: React.FC<T_LAYOUTPROPS> = async ({
+import { cn } from "@/src/lib/utils";
+import { useCurrentUser } from "../hooks/user_current_user";
+
+export const RoleGate: React.FC<T_LAYOUTPROPS> =  ({
   children,
   allowedRoles,
   className,
 }) => {
-  const role = await newUserRole();
-  if (role !== allowedRoles) {
+  const role =  useCurrentUser();
+
+  if (role.session?.role !== allowedRoles) {
     return (
       <div className={(cn(), className)}>
         <div className="w-56 p-3 rounded-lg border bg-red-500/10 border-red-500">

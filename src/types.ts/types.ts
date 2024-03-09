@@ -12,6 +12,7 @@ export type T_LAYOUTPROPS = {
   asChild?: boolean;
   className?: string;
   allowedRoles?: UserRole;
+  role?: string;
 };
 
 export type TLAYOUT_CARDWRAPPER_EXTENDS = T_LAYOUTPROPS & {

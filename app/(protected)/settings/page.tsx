@@ -1,14 +1,13 @@
 "use client";
 
 import React, { useEffect } from "react";
-
-import { Badge } from "@/src";
-import { MdSettingsAccessibility } from "react-icons/md";
+import { useSession } from "next-auth/react";
+import { IoSettingsOutline } from "react-icons/io5";
 
 import { SettingsPanel } from "@/app/(protected)/_components/settings_page";
 import { SettingsSidePanel } from "@/app/(protected)/_components/settings_side_panel";
 import { SettingsMainpanel } from "@/app/(protected)/_components/settings_mainpanel";
-import { useSession } from "next-auth/react";
+import { HeaderSet } from "@/app/(protected)/_components/header_set";
 import { useCurrentUser } from "@/src/hooks/user_current_user";
 
 const SettingsPage = () => {
@@ -32,15 +31,10 @@ const SettingsPage = () => {
   return (
     <div className="min-h-[92vh] w-full px-4 p-2 mx-auto ">
       {/* Header */}
-      <div className="logo_text text-xl flex-between items-center select-none">
-        <h2 className="flex flex-row gap-2 items-center">
-          <span>Settings & Preferences</span>{" "}
-          <MdSettingsAccessibility size={22} />
-        </h2>
-        <div className="text-muted-foreground flex flex-row items-center gap-2">
-          Role: <Badge className="font-poppins">{userRole.session?.role}</Badge>
-        </div>
-      </div>
+      <HeaderSet
+        name="Settings & Preferences"
+        icon={<IoSettingsOutline size={22} />}
+      />
       {/* Border */}
 
       <SettingsPanel
