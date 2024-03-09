@@ -2,7 +2,7 @@ import { LoginButton, ProjectText, Separator } from "@/src";
 
 export default function Home() {
   return (
-    <main className="dark:bg-black  flex-c-center h-full max-w-[600px] mx-auto">
+    <main className="dark:bg-black  flex-c-center h-[650px] shadow-xl rounded-xl  bg-slate-100 max-w-[650px] p-5 mx-auto">
       <div className="space-y-6 text-center h-[400px] flex-between flex-col">
         <div>
           <h1 className="head_text">Next Auth</h1>
@@ -14,7 +14,7 @@ export default function Home() {
 
         <div className="text-start">
           <p className="text-sm text-start">
-            I currently don't have a domain, so that does not allow a new user
+            I currently don&apos;t have a domain, so that does not allow a new user
             to register. In the future I will update to use a domain. This
             project is a full authentication process in next js, implementing{" "}
             <a
@@ -24,7 +24,18 @@ export default function Home() {
             >
               next.js Version 5 (Beta)
             </a>{" "}
-            at the time of implementation
+            at the time of implementation.
+          </p>
+
+          <p className="text-sm text-start mt-3">
+            Source Code:{" "}
+            <a
+              className="text-emerald-500 hover:underline duration-300 transition-all"
+              href="https://github.com/joe-jngigi/next_auth_V5"
+              target="_blank"
+            >
+              Github (Next Auth Version 5 )
+            </a>
           </p>
           <div className="mt-5 w-full">
             <div>

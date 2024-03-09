@@ -22,14 +22,14 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="en">
         <body className="font-poppins !scroll-smooth xl:max-w-[2000px] mx-auto dark:bg-black bg-slate-200">
-          <Toaster position="top-right" richColors/>
+          <Toaster position="top-right" richColors />
           <ToastContainer
             draggable
             position="bottom-right"
             className="text-xs font-display"
           />
 
-          {children}
+          <div className="flex-c-center bg  h-full">{children}</div>
         </body>
       </html>
     </SessionProvider>
