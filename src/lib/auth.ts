@@ -1,13 +1,13 @@
-"use server"
+"use server";
 import { auth } from "@/auth";
 
-export const useServerUser = async () => {
+export const ServerUser = async () => {
   const session = await auth();
 
   return session?.user;
 };
 
-export const useUserRole = async () => {
+export const newUserRole = async () => {
   const session = await auth();
 
   return session?.user?.role;

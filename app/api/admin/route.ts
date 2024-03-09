@@ -1,16 +1,18 @@
-import { auth } from "@/auth";
-import { useServerUser } from "@/src/lib/auth";
+import { ServerUser } from "@/src/lib/auth";
 import { data_base } from "@/src/lib/prisma-db";
 import { UserRole } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-export const GET = async (request: Response) => {
+export const GET = async () => {
   try {
     // const {} = await request.json();
 
-    const session = await useServerUser();
+    const session = await ServerUser();
     if (!session) {
-      NextResponse.json({ error: "User is not logged in!" }, { status: 401 });
+      return NextResponse.json(
+        { error: "User is not logged in!" },
+        { status: 401 }
+      );
     }
 
     if (session?.role !== UserRole.ADMIN) {
@@ -24,15 +26,17 @@ export const GET = async (request: Response) => {
       where: { id: session.id },
     });
 
-    return NextResponse.json({
-      userAccount,
+    // Create a new Response object with the desired data
+    const response = new Response(JSON.stringify({ userAccount }), {
       status: 200,
     });
+
+    return response;
   } catch (error) {
     console.error("Error:", error);
-    return NextResponse.json(
-      { error: "Error 403: Something went wrong. _path_ */api/admin*" },
-      { status: 500 }
-    );
+    return NextResponse.json({
+      error: "Error 403: Something went wrong. _path_ */api/admin*",
+      status: 403,
+    });
   }
 };

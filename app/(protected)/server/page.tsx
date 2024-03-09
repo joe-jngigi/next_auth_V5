@@ -1,9 +1,9 @@
 import React from "react";
-import { useServerUser } from "@/src/lib/auth";
+import { ServerUser } from "@/src/lib/auth";
 import { UserInfo } from "@/app/(protected)/_components/user_info";
 
 const ServerPage = async () => {
-  const user = await useServerUser();
+  const user = await ServerUser();
   const label = "User Information";
 
   return (

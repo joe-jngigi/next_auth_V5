@@ -1525,11 +1525,11 @@ This can be useful when you need to pass data from your server to your client-si
 
 ```TSX
 import React from "react";
-import { useServerUser } from "@/src/lib/auth";
+import { ServerUser } from "@/src/lib/auth";
 
 const ServerPage = async () => {
 
-  const user = await useServerUser();
+  const user = await ServerUser();
 
   return (
     <section>
@@ -1555,7 +1555,7 @@ If you prefer to use `JSON.stringify()` instead of `NextResponse.json()` in your
 
 ```typescript
 import { auth } from "@/auth";
-import { useServerUser } from "@/src/lib/auth";
+import { ServerUser } from "@/src/lib/auth";
 import { data_base } from "@/src/lib/prisma-db";
 import { UserRole } from "@prisma/client";
 
@@ -1563,7 +1563,7 @@ export const GET = async (request: Response) => {
   try {
     const {} = await request.json();
 
-    const session = await useServerUser();
+    const session = await ServerUser();
     if (!session) {
       return { error: "User is not logged in!" };
     }

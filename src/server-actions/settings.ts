@@ -5,7 +5,7 @@ import { settingsSchemas } from "@/src/schemas";
 
 import { getUserByEmail, getUserById } from "@/src/data-queries/user_data";
 import { data_base } from "@/src/lib/prisma-db";
-import { useServerUser } from "@/src/lib/auth";
+import { ServerUser } from "@/src/lib/auth";
 
 import { unstable_update } from "@/auth";
 
@@ -23,7 +23,7 @@ export const settingsActions = async (
     return { error: "The value input is invalid" };
   }
 
-  const user = await useServerUser();
+  const user = await ServerUser();
   if (!user) {
     return { error: "Session not available!" };
   }
@@ -89,7 +89,6 @@ export const settingsActions = async (
     validatedValues.data.password = hashedPassword;
     validatedValues.data.newPassword = undefined;
   }
-
 
   await data_base.user.update({
     where: { id: userDatabase.id },

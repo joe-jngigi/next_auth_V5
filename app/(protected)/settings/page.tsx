@@ -1,16 +1,16 @@
 import React from "react";
 
 import { Badge } from "@/src";
-import { useUserRole } from "@/src/lib/auth";
-import { MdOutlineAdminPanelSettings, MdSettingsAccessibility } from "react-icons/md";
+import { newUserRole } from "@/src/lib/auth";
+import { MdSettingsAccessibility } from "react-icons/md";
 
 import { SettingsPanel } from "@/app/(protected)/_components/settings_page";
 import { SettingsSidePanel } from "@/app/(protected)/_components/settings_side_panel";
 import { SettingsMainpanel } from "@/app/(protected)/_components/settings_mainpanel";
 
 const SettingsPage = async () => {
-  // const session = useServerUser();
-  const userRole = useUserRole();
+  // const session = ServerUser();
+  const userRole = newUserRole();
 
   return (
     <div className="min-h-[92vh] w-full px-4 p-2 mx-auto ">
@@ -35,7 +35,6 @@ const SettingsPage = async () => {
         </>
         <>
           <SettingsMainpanel />
-          
         </>
       </SettingsPanel>
     </div>

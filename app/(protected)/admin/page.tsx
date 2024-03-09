@@ -1,13 +1,13 @@
 import React from "react";
 
-import { useUserRole } from "@/src/lib/auth";
+import { newUserRole } from "@/src/lib/auth";
 import { Badge } from "@/src/components/ui/badge";
 import { RoleGate, Separator } from "@/src";
 import { UserRole } from "@prisma/client";
-import { TestRoutes } from "../_components/test_routes";
+import { TestRoutes } from "@/app/(protected)/_components/test_routes";
 
 const AdminPage = async () => {
-  const userRole = useUserRole();
+  const userRole = newUserRole();
   return (
     <div className="min-h-[92vh] w-full px-3 p-2 mx-auto">
       <div className="logo_text text-xl flex-between items-center select-none">

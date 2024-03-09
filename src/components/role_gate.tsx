@@ -1,6 +1,6 @@
 import React from "react";
 import { T_LAYOUTPROPS } from "@/src/types.ts/types";
-import { useUserRole } from "@/src/lib/auth";
+import { newUserRole } from "@/src/lib/auth";
 import { cn } from "@/src/lib/utils";
 
 export const RoleGate: React.FC<T_LAYOUTPROPS> = async ({
@@ -8,8 +8,7 @@ export const RoleGate: React.FC<T_LAYOUTPROPS> = async ({
   allowedRoles,
   className,
 }) => {
-
-  const role = await useUserRole();
+  const role = await newUserRole();
   if (role !== allowedRoles) {
     return (
       <div className={(cn(), className)}>

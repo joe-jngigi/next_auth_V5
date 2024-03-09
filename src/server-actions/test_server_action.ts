@@ -1,9 +1,9 @@
 "use server"
 import { UserRole } from "@prisma/client";
-import { useUserRole } from "@/src/lib/auth";
+import { newUserRole } from "@/src/lib/auth";
 
 export const adminServerAction = async () => {
-  const role = await useUserRole();
+  const role = await newUserRole();
 
   if (role !== UserRole.ADMIN) {
     return { error: "User is not Admin!" };
