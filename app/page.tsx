@@ -6,7 +6,7 @@ export default function Home() {
       <div className="space-y-6 text-center">
         <h1 className="head_text">Next Auth</h1>
         <Separator className="bg-slate-800 w-[600px]"  />
-        <LoginButton asChild mode="redirect">
+        <LoginButton asChild mode="modal">
           <button className="variant_btn mt-5">Welcome to Next-Auth</button>
         </LoginButton>
       </div>

@@ -16,8 +16,8 @@ export const LogOutButton: React.FC<T_LAYOUTPROPS> = ({
 
   const onClick = () => {
     logOut();
-    router.push("/auth/login");
-    router.replace("/auth/login");
+    // router.push("/");
+    // router.replace("/");
     // window.location.reload()
   };
 

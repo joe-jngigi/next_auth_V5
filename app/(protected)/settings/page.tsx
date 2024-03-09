@@ -1,16 +1,33 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 
 import { Badge } from "@/src";
-import { newUserRole } from "@/src/lib/auth";
 import { MdSettingsAccessibility } from "react-icons/md";
 
 import { SettingsPanel } from "@/app/(protected)/_components/settings_page";
 import { SettingsSidePanel } from "@/app/(protected)/_components/settings_side_panel";
 import { SettingsMainpanel } from "@/app/(protected)/_components/settings_mainpanel";
+import { useSession } from "next-auth/react";
+import { useCurrentUser } from "@/src/hooks/user_current_user";
 
-const SettingsPage = async () => {
+const SettingsPage = () => {
   // const session = ServerUser();
-  const userRole = newUserRole();
+  const userRole = useCurrentUser();
+
+  const session = useSession();
+
+  useEffect(() => {
+    if (session.data === null) {
+      session.status;
+      window.location.reload();
+      return;
+    }
+  }, [session]);
+
+  if (!userRole) {
+    return null;
+  }
 
   return (
     <div className="min-h-[92vh] w-full px-4 p-2 mx-auto ">
@@ -21,7 +38,7 @@ const SettingsPage = async () => {
           <MdSettingsAccessibility size={22} />
         </h2>
         <div className="text-muted-foreground flex flex-row items-center gap-2">
-          Role: <Badge className="font-poppins">{userRole}</Badge>
+          Role: <Badge className="font-poppins">{userRole.session?.role}</Badge>
         </div>
       </div>
       {/* Border */}

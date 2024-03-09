@@ -1,6 +1,6 @@
 {
   "name": "next_auth_admin",
-  "version": "0.1.0",
+  "version": "1.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,7 +8,6 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate"
-
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.4.0",
@@ -28,7 +27,7 @@
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
-    "next": "^14.2.0-canary.9",
+    "next": "^14.2.0-canary.11",
     "next-auth": "^5.0.0-beta.13",
     "next-themes": "^0.2.1",
     "react": "^18",

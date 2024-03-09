@@ -20,10 +20,11 @@ export const LoginForm = () => {
   const [isPending, setTransition] = useTransition();
   const [showTwoFactor, setShowTwoFactor] = useState(false);
 
+  const router = useRouter();
+
   const searchParams = useSearchParams();
   const urlError = searchParams.get("error");
   const callbackUrl = searchParams.get("callBackUrl");
-
 
   // const form
   const form = useForm<zod.infer<typeof LoginSchema>>({
@@ -53,6 +54,8 @@ export const LoginForm = () => {
             toast.success(data.success, { theme: "colored" });
             form.reset();
             // router.push();
+            router.refresh();
+
             window.location.replace(callbackUrl || DEFAULT_LOGIN_REDIRECT);
             window.location.reload();
             return;
